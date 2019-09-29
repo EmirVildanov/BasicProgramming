@@ -1,9 +1,2 @@
-# Basic Programming
-
-==Repository for homeworks :)==
-
-## homework 1
-
-1. Task1
-2. Task2
-3. Task3
+# Домашняя работа по программированию 
+## Вильданова Эмира
