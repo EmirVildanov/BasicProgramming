@@ -32,6 +32,7 @@ int main()
     char input[30];
     printf("Enter the number : ");
     scanf("%s", &input);
+    printf("The new number is : ");
     returnNewNumber(input);
     return 0;
 }
