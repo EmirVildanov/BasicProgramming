@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int findNaturalElement(int list[], int length, int start) //work perfectly
+int findNaturalElement(int list[], int length, int start)
 {
     int index = start;
     while (list[index] == 0)
@@ -10,7 +10,7 @@ int findNaturalElement(int list[], int length, int start) //work perfectly
     return index;
 }
 
-void printTheSum(int list[], int length) //work perfectly
+void printTheSum(int list[], int length)
 {
     int firstNaturalNumberIndex = 0;
     while (list[firstNaturalNumberIndex] == 0)
@@ -31,7 +31,7 @@ void printTheSum(int list[], int length) //work perfectly
     printf("\n");
 }
 
-void moveMaxElement(int list[], int length, int *maxElement, int *maxElementIndex) //work perfectly
+void moveMaxElement(int list[], int length, int *maxElement, int *maxElementIndex)
 {
     list[*maxElementIndex] = 0;
     list[*maxElementIndex + 1] = *maxElement + 1;
@@ -43,7 +43,7 @@ void moveMaxElement(int list[], int length, int *maxElement, int *maxElementInde
     }
 }
 
-int findSmallestElementIndex(int list[], int length, int maxElement, int maxElementIndex) //work perfectly
+int findSmallestElementIndex(int list[], int length, int maxElement, int maxElementIndex)
 {
     int index = length - 1;
     while (list[index - 1] == list[index])
