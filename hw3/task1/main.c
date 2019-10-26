@@ -74,11 +74,18 @@ int main() {
         printf("Enter new element of the array : ");
         scanf("%d", &numbers[i]);
     }
+    printf("Your array is : ");
+    for (int i = 0; i < length; ++i)
+    {
+        printf("%d ", numbers[i]);
+    }
+    printf("\n");
     heapSort(numbers, length);
     printf("Sorted array is : ");
     for (int i = 0 ; i < length; ++i)
     {
         printf("%d ", numbers[i]);
     }
+    free(numbers);
     return 0;
 }
