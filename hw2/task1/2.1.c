@@ -1,6 +1,17 @@
 #include <stdio.h>
+#include <stdlib.h>
 
-int findNaturalElement(int list[], int length, int start)
+int* createIntArray(int size)
+{
+    int* list = malloc(size * sizeof(int));
+    for (int i = 0; i < size; ++i)
+    {
+        list[i] = 0;
+    }
+    return list;
+}
+
+int findNaturalElement(int *list, int length, int start)
 {
     int index = start;
     while (list[index] == 0)
@@ -10,7 +21,7 @@ int findNaturalElement(int list[], int length, int start)
     return index;
 }
 
-void printTheSum(int list[], int length)
+void printTheSum(int *list, int length)
 {
     int firstNaturalNumberIndex = 0;
     while (list[firstNaturalNumberIndex] == 0)
@@ -31,7 +42,7 @@ void printTheSum(int list[], int length)
     printf("\n");
 }
 
-void moveMaxElement(int list[], int length, int *maxElement, int *maxElementIndex)
+void moveMaxElement(int *list, int length, int *maxElement, int *maxElementIndex)
 {
     list[*maxElementIndex] = 0;
     list[*maxElementIndex + 1] = *maxElement + 1;
@@ -43,7 +54,7 @@ void moveMaxElement(int list[], int length, int *maxElement, int *maxElementInde
     }
 }
 
-int findSmallestElementIndex(int list[], int length, int maxElement, int maxElementIndex)
+int findSmallestElementIndex(int *list, int length, int maxElement, int maxElementIndex)
 {
     int index = length - 1;
     while (list[index - 1] == list[index])
@@ -57,7 +68,7 @@ void transformUnits(int number)
 {
     int maxElement = 1;
     int maxElementIndex = 0;
-    int units[number];
+    int *units = createIntArray(number);
     for (int i = 0; i < number; ++i)
     {
         units[i] = 1;
@@ -92,6 +103,7 @@ void transformUnits(int number)
         moveMaxElement(units, number, &maxElement, &maxElementIndex);
     }
     printTheSum(units, number);
+    free(units);
 }
 
 int main()
@@ -99,6 +111,7 @@ int main()
     int input = 0;
     printf("Enter the number : ");
     scanf("%d,", &input);
+    printf("Number %d also may be represented as : \n", input);
     transformUnits(input);
     return 0;
 }
