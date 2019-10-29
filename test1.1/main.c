@@ -1,88 +1,78 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include "Array.h"
+#include "List.h"
 
-int* createBooksStack(size)
+const int maxSize = 20;
+
+int findFirstSpaceIndex(List* list)
 {
-    int *stack = malloc(size * sizeof(int));
-    for (int i = 0; i < size; ++i)
+    ListElement  *currentElement = getFirstListElement(list);
+    while (getValue(currentElement) != ' ')
     {
-        int complexity = 0;
-        printf("Enter the new lesson complexity : ");
-        scanf("%d", &complexity);
-        stack[i] = complexity;
+        currentElement = getNextElement(currentElement);
     }
-    return stack;
+    return getIndex(currentElement);
 }
 
-int* createEmptyStack(int size)
+int findAppropriateIndex(List* list, int* badIndex)
 {
-    int *stack = malloc(size * sizeof(int));
-    for (int i = 0; i < size; ++i)
+    ListElement *currentElement = getFirstListElement(list);
+    while(getValue(currentElement) != ' ')
     {
-        stack[i] = -1;
+        if (getNextElement(currentElement) == NULL)
+        {
+            return -1;
+        }
+        currentElement = getNextElement(currentElement);
+        if (getValue(currentElement) == ' ' && getIndex(currentElement) <= *badIndex)
+        {
+            while (getValue(currentElement) == ' ')
+            {
+                currentElement = getNextElement(currentElement);
+            }
+        }
     }
-    return stack;
+    return getIndex(currentElement);
 }
 
-int* createTheAppropriateStack(int* stack1, int* stack2, int size)
+void makeLongerLine(List* list,  int firstSpaceIndex, int* newSpaceIndex, int lineLength)
 {
-    int *stackIndexForBoth = createEmptyStack(size * 2);
-    int IndexForFirstStack = 0;
-    int IndexForSecondStack = 0;
-    int IndexForBoth = 0;
-    while (IndexForFirstStack < size && IndexForSecondStack < size)
+    int indexToInsert = findAppropriateIndex(list, newSpaceIndex);
+    if (indexToInsert == -1)
     {
-        if (stack1[IndexForFirstStack] > stack2[IndexForSecondStack])
-        {
-            stackIndexForBoth[IndexForBoth] = stack1[IndexForFirstStack];
-            ++IndexForFirstStack;
-        }
-        else if (stack1[IndexForFirstStack] < stack2[IndexForSecondStack])
-        {
-            stackIndexForBoth[IndexForBoth] = stack2[IndexForSecondStack];
-            ++IndexForSecondStack;
-        }
-        else
-        {
-            stackIndexForBoth[IndexForBoth] = stack2[IndexForSecondStack];
-            ++IndexForSecondStack;
-            ++IndexForFirstStack;
-        }
-        ++IndexForBoth;
+        *newSpaceIndex = firstSpaceIndex;
+        insert(list, firstSpaceIndex, ' ');
+        return;
     }
-    while (IndexForFirstStack < size)
-    {
-        stackIndexForBoth[IndexForBoth] = stack1[IndexForFirstStack];
-        ++IndexForFirstStack;
-        ++IndexForBoth;
-    }
-    while (IndexForSecondStack < size)
-    {
-        stackIndexForBoth[IndexForBoth] = stack2[IndexForSecondStack];
-        ++IndexForSecondStack;
-        ++IndexForBoth;
-    }
-    return stackIndexForBoth;
+    *newSpaceIndex = indexToInsert;
+    insert(list, indexToInsert, ' ');
 }
 
 int main() {
-    int numberOfLessons = 0;
-    printf("Enter the number of lessons : ");
-    scanf("%d", &numberOfLessons);
-    int *firstBookStack = createBooksStack(numberOfLessons);
-    int *secondBookStack = createBooksStack(numberOfLessons);
-    int *corporateStack = createTheAppropriateStack(firstBookStack, secondBookStack, numberOfLessons);
-    printf("The new stack of books is : ");
-    for (int i = 0; i < numberOfLessons * 2; ++i)
+    int userLength = 0;
+    char *line = createCharArray(maxSize);
+    List *list = createList();
+    printf("Enter the line : ");
+    gets(line);
+    int lineLength = strlen(line);
+    for (int i = lineLength - 1; i >= 0; --i)
     {
-        if (corporateStack[i] == -1)
-        {
-            break;
-        }
-        printf("%d ", corporateStack[i]);
+        addNew(list, i, line[i]);
     }
-    free(firstBookStack);
-    free(secondBookStack);
-    free(corporateStack);
+    printf("Enter the length you want to get : ");
+    scanf("%d", &userLength);
+    int firstSpaceIndex = findFirstSpaceIndex(list);
+    int newSpaceIndex = -1;
+    while (lineLength < userLength)
+    {
+        makeLongerLine(list, firstSpaceIndex, &newSpaceIndex, lineLength);
+        ++lineLength;
+    }
+    printf("The new line is : ");
+    printTheList(list);
+    free(line);
+    deleteList(list);
     return 0;
 }
