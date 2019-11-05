@@ -17,4 +17,5 @@ void front(Queue* queue);
 bool addToQueue();
 char popFromQueue(Queue* queue);
 int size(Queue *queue);
+void deleteQueue(Queue *queue);
 #endif

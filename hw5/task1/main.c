@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
 #include "Array.h"
@@ -75,6 +76,8 @@ char* makePostfix(char* line)
         newLine[newlineIndex] = popFromQueue(queue);
         ++newlineIndex;
     }
+    deleteQueue(queue);
+    deleteStack(stack);
     return  newLine;
 }
 
@@ -84,5 +87,7 @@ int main() {
     scanf("%s", line);
     char *postfixLine = makePostfix(line);
     printf("The postfix line is : %s", postfixLine);
+    free(line);
+    free(postfixLine);
     return 0;
 }

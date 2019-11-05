@@ -50,7 +50,7 @@ void pushToQueue(int value, Queue *queue)
 
 bool addToQueue()
 {
-    struct QueueElement *newPerson = (QueueElement*) malloc(sizeof(QueueElement));
+    QueueElement *newPerson = (QueueElement*) malloc(sizeof(QueueElement));
 }
 
 void front(Queue* queue)
@@ -88,4 +88,14 @@ char popFromQueue(Queue* queue)
 int size(Queue *queue)
 {
     return queue->length;
+}
+
+void deleteQueue(Queue *queue)
+{
+    while (queue->first != NULL)
+    {
+        QueueElement *currentElement = queue->first;
+        queue->first = currentElement->next;
+        free(currentElement);
+    }
 }

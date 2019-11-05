@@ -50,3 +50,13 @@ char getValue(Stack *stack)
 {
     return stack->first->value;
 }
+
+void deleteStack(Stack* stack)
+{
+    while (stack->first != NULL)
+    {
+        StackElement *currentElement = stack->first;
+        stack->first = currentElement->next;
+        free(currentElement);
+    }
+}

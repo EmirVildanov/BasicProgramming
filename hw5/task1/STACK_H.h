@@ -12,5 +12,5 @@ bool isEmpty(Stack *stack);
 bool push(char value, Stack *stack);
 char pop(Stack *stack);
 char getValue(Stack *stack);
-
+void deleteStack(Stack* stack);
 #endif
