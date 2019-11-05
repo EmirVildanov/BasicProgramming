@@ -11,5 +11,5 @@ Stack* createStack();
 bool isEmpty(Stack *stack);
 bool push(float value, Stack *stack);
 float pop(Stack *stack);
-
+void deleteStack(Stack* stack);
 #endif

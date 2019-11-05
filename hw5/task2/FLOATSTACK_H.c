@@ -45,3 +45,14 @@ float pop(Stack* stack)
     float value = poppedElement ->value;
     return value;
 }
+
+void deleteStack(Stack* stack)
+{
+    while (stack->first != NULL)
+    {
+        StackElement *currentElement = stack->first;
+        stack->first = currentElement->next;
+        free(currentElement);
+    }
+}
+

@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include "FLOATSTACK_H.h"
 #include "Array.h"
 
@@ -57,7 +58,9 @@ float calculateLine(char* line)
             push(result, stack);
         }
     }
-    return pop(stack);
+    float result = pop(stack);
+    deleteStack(stack);
+    return result;
 }
 
 int main()
@@ -66,5 +69,6 @@ int main()
     printf("Please, enter your postfix line without spaces : ");
     scanf("%s", line);
     printf("The answer is : %f", calculateLine(line));
+    free(line);
     return 0;
 }
