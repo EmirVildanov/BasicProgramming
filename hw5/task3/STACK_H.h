@@ -13,6 +13,7 @@ bool isEmpty(Stack *stack);
 bool push(char value, Stack *stack);
 char pop(Stack *stack);
 char getValue(Stack *stack);
+void deleteCharStack(Stack* stack);
 
 //For stack with float elements
 
@@ -27,4 +28,5 @@ bool isEmptyFloatStack(FloatStack *floatStack);
 bool pushFloatStack(float value, FloatStack *floatStack);
 float popFloatStack(FloatStack *floatStack);
 float getFloatValue(FloatStack *floatStack);
+void deleteFloatStack(FloatStack* stack);
 #endif

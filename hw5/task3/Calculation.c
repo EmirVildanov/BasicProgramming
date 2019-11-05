@@ -72,6 +72,8 @@ char* makePostfix(char* line)
         newLine[newlineIndex] = popFromQueue(queue);
         ++newlineIndex;
     }
+    deleteCharStack(stack);
+    deleteQueue(queue);
     return  newLine;
 }
 
@@ -119,7 +121,9 @@ float calculateLine(char* line)
             pushFloatStack(result, floatStack);
         }
     }
-    return popFloatStack(floatStack);
+    float result = popFloatStack(floatStack);
+    deleteFloatStack(floatStack);
+    return result;
 }
 
 

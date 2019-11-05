@@ -53,6 +53,17 @@ char getValue(Stack *stack)
     return stack->first->value;
 }
 
+void deleteCharStack(Stack* stack)
+{
+    while (stack->first != NULL)
+    {
+        StackElement *currentElement = stack->first;
+        stack->first = currentElement->next;
+        free(currentElement);
+    }
+}
+
+
 //For stack with float elements
 
 struct FloatStackElement
@@ -102,4 +113,14 @@ float popFloatStack(FloatStack* floatStack)
 float getFloatValue(FloatStack *floatStack)
 {
     return floatStack->first->value;
+}
+
+void deleteFloatStack(FloatStack* stack)
+{
+    while (stack->first != NULL)
+    {
+        FloatStackElement *currentElement = stack->first;
+        stack->first = currentElement->next;
+        free(currentElement);
+    }
 }

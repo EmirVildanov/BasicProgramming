@@ -89,3 +89,13 @@ int size(Queue *queue)
 {
     return queue->length;
 }
+
+void deleteQueue(Queue *queue)
+{
+    while (queue->first != NULL)
+    {
+        QueueElement *currentElement = queue->first;
+        queue->first = currentElement->next;
+        free(currentElement);
+    }
+}

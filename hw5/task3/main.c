@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "Array.h"
 #include "Calculation.h"
 
@@ -15,5 +16,6 @@ int main() {
     printf("Please, enter your line without spaces : ");
     scanf("%s", newLine);
     printf("The answer is : %f", calculateNewLine(newLine));
+    free(newLine);
     return 0;
 }
