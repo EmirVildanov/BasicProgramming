@@ -23,11 +23,7 @@ int findNaturalElement(int *list, int length, int start)
 
 void printTheSum(int *list, int length)
 {
-    int firstNaturalNumberIndex = 0;
-    while (list[firstNaturalNumberIndex] == 0)
-    {
-        ++firstNaturalNumberIndex;
-    }
+    int firstNaturalNumberIndex = findNaturalElement(list, length, 0);
     printf("%d ", list[firstNaturalNumberIndex]);
     if (length > 1)
     {
@@ -54,10 +50,10 @@ void moveMaxElement(int *list, int length, int *maxElement, int *maxElementIndex
     }
 }
 
-int findSmallestElementIndex(int *list, int length, int maxElement, int maxElementIndex)
+int findSmallestElementIndex(int *sortedArray, int length)
 {
     int index = length - 1;
-    while (list[index - 1] == list[index])
+    while (sortedArray[index - 1] == sortedArray[index])
     {
         index -= 1;
     }
@@ -78,7 +74,7 @@ void transformUnits(int number)
         printTheSum(units, number);
         while (units[number - 1] + units[number - 2] <= maxElement)
         {
-            int smallestElementIndex = findSmallestElementIndex(units, number, maxElement, maxElementIndex);
+            int smallestElementIndex = findSmallestElementIndex(units, number);
             int smallestElement = units[smallestElementIndex];
             if (smallestElementIndex == number - 1)
             {
@@ -115,3 +111,4 @@ int main()
     transformUnits(input);
     return 0;
 }
+
