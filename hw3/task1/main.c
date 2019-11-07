@@ -13,58 +13,50 @@ int* createArray(int size)
     return newList;
 }
 
-void changePlaces(int list[], int first, int second)
+void swap(int list[], int first, int second)
 {
     int temporary = list[first];
     list[first] = list[second];
     list[second] = temporary;
 }
 
-void firstSort(int list[], int length)
+void heapify(int list[], int length, int firstIndex, int secondIndex)
 {
-    for (int i = 0; i < length / 2; ++i)
+    for (int i = 0; i < length / 2; ++i) //first sort
     {
-        for (int j = 2 * i + 1; j < length; ++j)
+        for (int j = 2 * i + firstIndex; j < length; ++j)
         {
             if (list[i] < list[j])
             {
-                changePlaces(list, i, j);
+                swap(list, i, j);
             }
         }
     }
-}
-
-void secondSort(int list[], int length)
-{
-    for (int i = 0; i < length / 2; ++i)
+    
+    for (int i = 0; i < length / 2; ++i) //second sort
     {
-        for (int j = 2 * i + 2; j < length; ++j)
+        for (int j = 2 * i + secondIndex; j < length; ++j)
         {
             if (list[i] < list[j])
             {
-                changePlaces(list, i, j);
+                swap(list, i, j);
             }
         }
     }
-}
-
-void heapify(int list[], int length)
-{
-    firstSort(list, length);
-    secondSort(list, length);
 }
 
 void heapSort(int list[], int length)
 {
-    heapify(list, length);
+    heapify(list, length, 1, 2);
     for (int i = 1; i < length; ++i)
     {
-        changePlaces(list, 0, length - i);
-        heapify(list, length - i);
+        swap(list, 0, length - i);
+        heapify(list, length - i, 1, 2);
     }
 }
 
-int main() {
+int main()
+{
     int *numbers = createArray(maxSize);
     int length = 0;
     printf("Enter the size of your array : ");
@@ -74,18 +66,11 @@ int main() {
         printf("Enter new element of the array : ");
         scanf("%d", &numbers[i]);
     }
-    printf("Your array is : ");
-    for (int i = 0; i < length; ++i)
-    {
-        printf("%d ", numbers[i]);
-    }
-    printf("\n");
     heapSort(numbers, length);
     printf("Sorted array is : ");
     for (int i = 0 ; i < length; ++i)
     {
         printf("%d ", numbers[i]);
     }
-    free(numbers);
     return 0;
 }
