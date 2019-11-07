@@ -16,67 +16,45 @@ int* createIntArray(int size)
 
 bool findInArray(int* list, int size, int value)
 {
-    bool answer = false;
     for(int i = 0; i < size; ++i)
     {
         if (list[i] == value)
         {
-            answer = true;
-            break;
+            return true;
         }
     }
-    return answer;
-}
-
-bool findDigit(int* list, int digit)
-{
-    bool checking = false;
-    for (int i = 0; i < 4; ++i)
-    {
-        if (list[i] == digit)
-        {
-            checking = true;
-            break;
-        }
-    }
-    return checking;
+    return false;
 }
 
 void startTheGame(int number, int *numberArray)
 {
-    printf("%d \n", number);
     int input = 0;
     int *inputArray = createIntArray(4);
-    printf("Enter your number : ");
-    scanf("%d", &input);
-    for (int i = 0; i < 4; ++i)
+    int bullNumber = 0;
+    while (bullNumber != 4)
     {
-        inputArray[i] = (input / (int) pow(10, 3 - i)) % 10;
-    }
-    while (input != number)
-    {
-        int bullNumber = 0;
+        bullNumber = 0;
         int cowNumber = 0;
+        printf("Enter number : ");
+        scanf("%d", &input);
+        for (int i = 0; i < 4; ++i)
+        {
+            inputArray[i] = (input / (int) pow(10, 3 - i)) % 10;
+        }
         for (int i = 0; i < 4; ++i)
         {
             if (inputArray[i] == numberArray[i])
             {
                 ++bullNumber;
             }
-            else if (findDigit(numberArray, inputArray[i]))
+            else if (findInArray(numberArray, 4, inputArray[i]))
             {
                 ++cowNumber;
             }
         }
         printf("cows : %d bulls: %d \n", cowNumber, bullNumber);
-        printf("Enter the next number : ");
-        scanf("%d", &input);
-        for (int i = 0; i < 4; ++i)
-        {
-            inputArray[i] = (input / (int) pow(10, 3 - i)) % 10;
-        }
     }
-    printf("My congradulations! You win!");
+    printf("My congratulations! You win!");
     free(inputArray);
 }
 
@@ -84,17 +62,20 @@ int main()
 {
     int *numberArray = createIntArray(4);
     int number = 0;
+    printf("the number is : ");
     srand(time(NULL));
     for (int i = 0; i < 4; i++) 
     {
-        int digit = rand()%10;
+        int digit = rand() % 10;
         while (findInArray(numberArray, i, digit))
         {
-            digit = rand()%10;
+            digit = rand() % 10;
         }
         numberArray[i] = digit;
-        number += numberArray[i] * pow(10, 3 - i);
+        printf("%d", digit);
+        number = number * 10 + numberArray[i];
     }
+    printf("\n");
     printf("Let's start the game \n");
     startTheGame(number, numberArray);
     free(numberArray);
