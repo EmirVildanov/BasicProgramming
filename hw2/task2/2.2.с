@@ -1,25 +1,26 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
+#include <float.h>
 #include <stdbool.h>
+
+const float epsilan = FLT_EPSILON;
 
 struct Fraction
 {
+   float power; 
    int numerator;
    int denominator;
-   float power; 
 };
 
-int findNumberOfFractions(int maxDenominator)
+bool floatNumbersCompare(float firstNumber, float secondNumber)
 {
-    if (maxDenominator == 2)
+    if (fabs(firstNumber - secondNumber) < epsilan)
     {
-        return 1;
+        return true;
     }
-    else
-    {
-        return findNumberOfFractions(maxDenominator - 1) + maxDenominator - 1;
-    }
+    return false;
 }
 
 bool findFractionPower(struct Fraction list[], int length, float power)
@@ -27,62 +28,56 @@ bool findFractionPower(struct Fraction list[], int length, float power)
     bool checking = false;
     for (int i = 0; i < length; ++i)
     {
-        if (list[i].power == power)
+        if (floatNumbersCompare(list[i].power, power))
         {
-            checking = true;
-            break;
+            return true;
         }
     }
-    return checking;
+    return false;
 }
 
 void printAllFractions(int number, struct Fraction fractions[], int length)
 {
     for (int i = 0; i < length; ++i)
     {
-        int minFractionIndex = 0;
-        float maxFraction = (float) (number - 1) / number;
-        for (int j = 0; j < length; ++j)
+        for (int j = i + 1; j < length; ++j)
         {
-            if (fractions[j].power < fractions[minFractionIndex].power)
+            if (fractions[j].power < fractions[i].power)
             {
-                minFractionIndex = j;
+                struct Fraction temporary = fractions[i];
+                fractions[i] = fractions[j];
+                fractions[j] = temporary;
             }
         }
-        printf("%d%c%d \n", fractions[minFractionIndex].numerator, '/', fractions[minFractionIndex].denominator);
-        fractions[minFractionIndex].power = 1;
+    }
+    for (int i = 0; i < length; ++i)
+    {
+        printf("%d%c%d \n", fractions[i].numerator, '/', fractions[i].denominator);
     }
 }
 
 void writeAllFractions(int input)
 {
-    int length = findNumberOfFractions(input); 
+    int length = input / 2 * (input - 1);; 
     struct Fraction fractions[length];
-    struct Fraction fraction;
     int newFrationCounter = 0;
-    fraction.numerator = 1;
-    fraction.denominator = 2;
-    for (int i = 0; i < input - 1; ++i)
+    for (int denominator = 2; denominator < input + 1; ++denominator)
     {
-        while (fraction.numerator < fraction.denominator)
+        for (int numerator = 1; numerator < denominator; ++numerator)
         {
-            fraction.power = (float) fraction.numerator / fraction.denominator;
-            if (findFractionPower(fractions, length, fraction.power) == true)
+            float power = (float) numerator / denominator;
+            if (findFractionPower(fractions, length, power))
             {
-                fraction.numerator += 1;
                 continue;
             }
             else
             {
-                fractions[newFrationCounter].power = fraction.power;
-                fractions[newFrationCounter].numerator = fraction.numerator;
-                fractions[newFrationCounter].denominator = fraction.denominator;
+                fractions[newFrationCounter].power = power;
+                fractions[newFrationCounter].numerator = numerator;
+                fractions[newFrationCounter].denominator = denominator;
                 newFrationCounter += 1;
-                fraction.numerator += 1;
             }
         }
-        fraction.denominator += 1;
-        fraction.numerator = 1;
     }
     printAllFractions(input, fractions, newFrationCounter);
 }
