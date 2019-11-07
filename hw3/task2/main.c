@@ -2,11 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-const int maxSize = 1000;
+const int maxLineSize = 100;
+const int maxReadingSize = 100;
 
 char* createCharArray(int size)
 {
-    char *list = malloc(maxSize * sizeof(char));
+    char *list = malloc(maxLineSize * sizeof(char));
     for (int i = 0; i < size; ++i)
     {
         list[i] = '\0';
@@ -18,7 +19,7 @@ int main()
 {
     FILE *file = fopen("text", "rt");
     int answer = 0;
-    char *newline = createCharArray((maxSize));
+    char *newline = createCharArray(maxLineSize);
     if (file == NULL)
     {
         printf("\nPlease put your file in the build-debug directory");
@@ -28,7 +29,7 @@ int main()
     {
         while (!feof(file))
         {
-            if (fgets(newline,100, file) != NULL)
+            if (fgets(newline, maxLineSize, file) != NULL)
             {
                 for (int i = 0; i < strlen(newline); ++i)
                 {
