@@ -56,24 +56,23 @@ void quickSort(int* numbers, int left, int right)
     quickSort(numbers, right + 1, rememberRight);
 }
  
-int returnNewNumber(char* string)
+int returnNewNumber(char* inputNumber)
 {
+    int answer = 0;
     int length = 0;
-    length = strlen(string);
-    int number = atoi(string);
+    length = strlen(inputNumber);
     int *digits = createIntArray(length);
     for (int i = 0; i < length; ++i)
     {
-        int tenPower = (int) pow(10, length - i - 1);
-        digits[i] = number / tenPower;
-        number = number % tenPower;
+        digits[i] = inputNumber[i] - '0';
     }
     quickSort(digits, 0, length - 1);
     for (int i = 0; i < length; ++i)
     {
-        printf("%d", digits[i]);
+        answer = answer * 10 + digits[i];
     }
     free(digits);
+    return answer;
 }
 
 int main()
@@ -81,8 +80,8 @@ int main()
     char *input = createCharArray(maxSize);
     printf("Enter the number : ");
     scanf("%s", input);
-    printf("The smallest number is : ");
-    returnNewNumber(input);
+    int answer = returnNewNumber(input);
+    printf("The smallest number is : %d", answer);
     free(input);
     return 0;
 }
