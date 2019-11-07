@@ -13,42 +13,31 @@ int* createArray(int size)
     return newList;
 }
 
-void replace(int list[], int first, int second)
+void swap(int list[], int first, int second)
 {
     int temporary = list[first];
     list[first] = list[second];
     list[second] = temporary;
 }
 
-int findNoNullIndex(int list[], int length, int nullIndex)
+int findFartherNaturalIndex(int list[], int length, int zeroIndex)
 {
     int index = length - 1;
-    while (list[index] == 0)
+    while (list[index] == 0 && index != zeroIndex)
     {
-        if (index == 0)
-        {
-            return index;
-        }
         index -= 1;
     }
-    if (index < nullIndex)
-    {
-        return nullIndex;
-    }
-    else
-    {
-        return index;
-    }
+    return index;
 }
 
-void moveTheNulls(int list[], int length)
+void moveZeros(int list[], int length)
 {
     for (int i = 0; i < length; ++i)
     {
         if (list[i] == 0)
         {
-            int noNullElementIndex = findNoNullIndex(list, length, i);
-            replace(list, i, noNullElementIndex);
+            int noZeroElementIndex = findFartherNaturalIndex(list, length, i);
+            swap(list, i, noZeroElementIndex);
         }
     }
 }
@@ -64,18 +53,11 @@ int main()
         printf("Enter new element of the array : ");
         scanf("%d", &numbers[i]);
     }
-    printf("Your array is : ");
-    for(int i = 0; i < length; ++i)
-    {
-        printf("%d ", numbers[i]);
-    }
-    printf("\n");
-    moveTheNulls(numbers, length);
+    moveZeros(numbers, length);
     printf("The new array is : ");
     for (int i = 0; i < length; ++i)
     {
         printf("%d ", numbers[i]);
     }
-    free(numbers);
     return 0;
 }
