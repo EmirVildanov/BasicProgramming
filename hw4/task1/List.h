@@ -1,5 +1,5 @@
-#ifndef INC_4_2_LIST_H
-#define INC_4_2_LIST_H
+#ifndef LIST_H
+#define LIST_H
 
 #include <stdbool.h>
 struct List;
