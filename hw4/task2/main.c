@@ -12,7 +12,6 @@ int main()
     FILE* file = fopen("numbers", "a+");
     List* numberList = createList();
     int numberIndex = 0;
-    addNew(numberList, "404", "support", numberIndex, maxValueSize);
     ++numberIndex;
     while (!feof(file))
     {

@@ -25,49 +25,18 @@ void addNew(List* list, char number[], char name[], int numberIndex, int maxValu
     list->first  = newElement;
 }
 
-int findNameIndex(List* list, const char name[])
-{
-    int index = -1;
-    ListElement* currentNumber = list->first;
-    while (strcmp(currentNumber->number, "404") != 00)
-    {
-        if (strcmp(currentNumber->name, name) == 0)
-        {
-            return currentNumber->numberIndex;
-        }
-        currentNumber = currentNumber->next;
-    }
-    return index;
-}
-
-int findNumberIndex(List* list, const char number[])
-{
-    int index = -1;
-    ListElement* currentNumber = list->first;
-    while (strcmp(currentNumber->number, "404") != 00)
-    {
-        if (strcmp(currentNumber->number, number) == 0)
-        {
-            return currentNumber->numberIndex;
-        }
-        currentNumber = currentNumber->next;
-    }
-    return index;
-}
-
 char* findNumber(List* list, char name[], int maxNumberSize)
 {
     char *number = malloc(maxNumberSize * sizeof(char));
     number[0] = '*';
-    int nameIndex = findNameIndex(list, name);
-    if (nameIndex != -1)
+    ListElement *currentElement = list->first;
+    while (currentElement != NULL)
     {
-        ListElement *currentNumber = list->first;
-        while (currentNumber->numberIndex != nameIndex)
+        if (strcmp(currentElement->name, name) == 0)
         {
-            currentNumber = currentNumber->next;
+            return currentElement->number;
         }
-        return currentNumber->number;
+        currentElement = currentElement->next;
     }
     return number;
 }
@@ -76,15 +45,14 @@ char* findName(List* list, char number[], int maxNameSize)
 {
     char *answer = malloc(maxNameSize * sizeof(char));
     answer[0] = '*';
-    int numberIndex = findNumberIndex(list, number);
-    if (numberIndex != -1)
+    ListElement *currentElement = list->first;
+    while (currentElement != NULL)
     {
-        ListElement *currentNumber = list->first;
-        while (currentNumber->numberIndex != numberIndex)
+        if (strcmp(currentElement->number, number) == 0)
         {
-            currentNumber = currentNumber->next;
+            return currentElement->name;
         }
-        return currentNumber->name;
+        currentElement = currentElement->next;
     }
     return answer;
 }

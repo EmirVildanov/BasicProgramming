@@ -1,13 +1,6 @@
-#ifndef H_CONST
-#define H_CONST
-
-
-
-#endif
-
-
-#ifndef INC_4_2_LIST_H
-#define INC_4_2_LIST_H
+#ifndef LIST_H
+#define LIST_H
+#define valueSize 15
 
 #include <stdbool.h>
 
@@ -17,8 +10,8 @@ struct ListElement;
 typedef struct ListElement ListElement;
 struct ListElement{
     int numberIndex;
-    char number[15];
-    char name[15];
+    char number[valueSize];
+    char name[valueSize];
     ListElement* next;
 };
 
@@ -32,8 +25,6 @@ bool isEmpty(List*);
 void addNew(List* list, char number[], char name[], int numberIndex, int maxValueSize);
 char* findNumber(List* list, char name[], int maxNumberSize);
 char* findName(List* list, char number[], int maxNameSize);
-int findNameIndex(List* list, const char name[]);
-int findNumberIndex(List* list, const char number[]);
 int pop(List* list, int* numberIndex);
 void deleteList(List* list);
 #endif
