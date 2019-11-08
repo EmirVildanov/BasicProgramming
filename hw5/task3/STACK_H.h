@@ -1,5 +1,5 @@
-#ifndef UNTITLED_STACK_H_H
-#define UNTITLED_STACK_H_H
+#ifndef STACK_H
+#define STACK_H
 #include <stdbool.h>
 //For stack with char elements
 struct Stack;

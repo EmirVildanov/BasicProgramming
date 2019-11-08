@@ -1,5 +1,5 @@
-#ifndef INC_5_3_CALCULATION_H
-#define INC_5_3_CALCULATION_H
+#ifndef CALCULATION_H
+#define CALCULATION_H
 
 #include <stdbool.h>
 
