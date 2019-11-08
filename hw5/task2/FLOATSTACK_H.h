@@ -1,5 +1,5 @@
-#ifndef UNTITLED_INTSTACK_H_H
-#define UNTITLED_INTSTACK_H_H
+#ifndef INTSTACK_H
+#define INTSTACK_H
 #include <stdbool.h>
 struct Stack;
 struct StackElement;
