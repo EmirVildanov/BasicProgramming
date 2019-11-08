@@ -1,5 +1,5 @@
-#ifndef INC_6_3_BAG_H
-#define INC_6_3_BAG_H
+#ifndef SET_H
+#define SET_H
 
 #include <stdbool.h>
 
