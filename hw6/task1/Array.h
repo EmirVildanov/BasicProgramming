@@ -1,5 +1,5 @@
-#ifndef ARRAY_ARRAY_H
-#define ARRAY_ARRAY_H
+#ifndef ARRAY_H
+#define ARRAY_H
 
 char* createCharArray(int size);
 int* createIntArray(int size);
