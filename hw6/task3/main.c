@@ -19,9 +19,11 @@ int main() {
     int *decreasingArray = createIntArray(maxSize);
     int sizeOfArray = 0;
     addToSet(set, 5);
+    addToSet(set, 6);
     addToSet(set, 8);
-    addToSet(set, 7);
     addToSet(set, 3);
+    addToSet(set, 7);
+    addToSet(set, 9);
     //Checking deleting work properly
     checkElement(set, 8);
     deleteElement(set, 8);

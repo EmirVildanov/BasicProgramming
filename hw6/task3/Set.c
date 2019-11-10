@@ -155,16 +155,6 @@ void checkElement(Set* set, int value)
     }
 }
 
-SetElement* findNewRoot(SetElement* setElement)
-{
-    SetElement *maxLeftElement = setElement->leftChild;
-    while (setElement->rightChild != NULL)
-    {
-        maxLeftElement = setElement->rightChild;
-    }
-    return maxLeftElement;
-}
-
 void processPrint(SetElement* setElement)
 {
     if (setElement == NULL)
@@ -185,6 +175,16 @@ void printSet(Set* set)
 {
     printf("The hole set : ");
     processPrint(set->root);
+}
+
+SetElement* findNewRoot(SetElement* setElement)
+{
+    SetElement *maxLeftElement = setElement->leftChild;
+    while (maxLeftElement->rightChild != NULL)
+    {
+        maxLeftElement = maxLeftElement->rightChild;
+    }
+    return maxLeftElement;
 }
 
 void deleteElement(Set* set, int value)
@@ -261,11 +261,9 @@ void deleteElement(Set* set, int value)
         else
         {
             SetElement *newRoot = findNewRoot(currentElement);
-            parent->leftChild = newRoot;
             int rememberValue = newRoot->value;
             deleteElement(set, rememberValue);
             currentElement->value = rememberValue;
-            free(newRoot);
         }
     }
         //If the element is parent's right child
@@ -289,11 +287,9 @@ void deleteElement(Set* set, int value)
         else
         {
             SetElement *newRoot = findNewRoot(currentElement);
-            parent->rightChild = newRoot;
             int rememberValue = newRoot->value;
             deleteElement(set, rememberValue);
             currentElement->value = rememberValue;
-            free(newRoot);
         }
     }
 }
