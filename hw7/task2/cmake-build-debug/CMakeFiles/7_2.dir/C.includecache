@@ -1,0 +1,18 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/emir/Desktop/Projects/7.2/String.h
+stdbool.h
+-
+
+/home/emir/Desktop/Projects/7.2/main.c
+stdio.h
+-
+String.h
+/home/emir/Desktop/Projects/7.2/String.h
+
