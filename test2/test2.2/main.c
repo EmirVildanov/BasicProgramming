@@ -132,5 +132,11 @@ int main() {
     String *maxDate = findGreatestDate(datesArray, datesNumber);
     printf("The greatest date is : ");
     printString(maxDate);
+    free(newline);
+    for (int i = 0; i < datesNumber; ++i)
+    {
+        free(datesArray[i]);
+    }
+    free(datesArray);
     return 0;
 }
