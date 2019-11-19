@@ -55,7 +55,25 @@ void quickSort(int* numbers, int left, int right)
     quickSort(numbers, rememberLeft, right - 1);
     quickSort(numbers, right + 1, rememberRight);
 }
- 
+
+int findNonZeroIndex(int* digits, int lenght)
+{
+    for (int i = 0; i < lenght; ++i)
+    {
+        if (digits[i] != 0)
+        {
+            return i;
+        }
+    }
+}
+
+void swap(int* digits, int firstIndex, int secondIndex)
+{
+    int temporary = digits[firstIndex];
+    digits[firstIndex] = digits[secondIndex];
+    digits[secondIndex] = temporary;
+}
+
 int returnNewNumber(char* inputNumber)
 {
     int answer = 0;
@@ -67,6 +85,10 @@ int returnNewNumber(char* inputNumber)
         digits[i] = inputNumber[i] - '0';
     }
     quickSort(digits, 0, length - 1);
+    if (digits[0] == 0)
+    {
+        swap(digits, 0, findNonZeroIndex(digits, length));
+    }
     for (int i = 0; i < length; ++i)
     {
         answer = answer * 10 + digits[i];
