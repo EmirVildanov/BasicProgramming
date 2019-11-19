@@ -13,11 +13,16 @@
 
 #include <stdio.h>
 #include "String.h"
+#include "Array.h"
 
+const int maxSize = 100;
 
 int main()
 {
-    String* string = createString("Check");
+    char* charString = createCharArray(maxSize);
+    printf("Enter your string (for better example please enter 'Check') : ");
+    scanf("%s", charString);
+    String* string = createString(charString);
     //checking Length function
     printf("The length of your string is : %d \n", findLength(string));
     //checking isEmpty function
@@ -28,11 +33,13 @@ int main()
     String *cloneString = clone(string);
     printString(string);
     //checking Adding function
-    String *addingString = createString("er");
+    char* charAddingString = "er";
+    String *addingString = createString(charAddingString);
     addString(string, addingString);
     printString(string);
     //checking Compare function
-    String* checkString = createString("Checker");
+    char * charCheckString = "Checker";
+    String* checkString = createString(charCheckString);
     if (compare(string, checkString))
     {
         printf("Equal strings\n");
@@ -53,7 +60,7 @@ int main()
     String* cutString = cutOut(string, 1, 4);
     printString(cutString);
     //checking Char conversion
-    char* charString = makeChar(string);
+    charString = makeChar(string);
     printf("The char string is : %s \n", charString);
     return 0;
 }
