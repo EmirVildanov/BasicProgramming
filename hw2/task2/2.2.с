@@ -5,7 +5,7 @@
 #include <float.h>
 #include <stdbool.h>
 
-const float epsilan = FLT_EPSILON;
+const float epsilon = 1e-7;
 
 struct Fraction
 {
@@ -16,11 +16,7 @@ struct Fraction
 
 bool floatNumbersCompare(float firstNumber, float secondNumber)
 {
-    if (fabs(firstNumber - secondNumber) < epsilan)
-    {
-        return true;
-    }
-    return false;
+    return fabs(firstNumber - secondNumber) < epsilon;
 }
 
 bool findFractionPower(struct Fraction list[], int length, float power)
@@ -56,11 +52,9 @@ void printAllFractions(int number, struct Fraction fractions[], int length)
     }
 }
 
-void writeAllFractions(int input)
+void getAllFractions(int input, struct Fraction fractions[], int* newFrationCounter)
 {
-    int length = input / 2 * (input - 1);; 
-    struct Fraction fractions[length];
-    int newFrationCounter = 0;
+    int length = input / 2 * (input - 1); 
     for (int denominator = 2; denominator < input + 1; ++denominator)
     {
         for (int numerator = 1; numerator < denominator; ++numerator)
@@ -72,21 +66,23 @@ void writeAllFractions(int input)
             }
             else
             {
-                fractions[newFrationCounter].power = power;
-                fractions[newFrationCounter].numerator = numerator;
-                fractions[newFrationCounter].denominator = denominator;
-                newFrationCounter += 1;
+                fractions[*newFrationCounter].power = power;
+                fractions[*newFrationCounter].numerator = numerator;
+                fractions[*newFrationCounter].denominator = denominator;
+                *newFrationCounter += 1;
             }
         }
     }
-    printAllFractions(input, fractions, newFrationCounter);
 }
 
 int main ()
 {
     int input = 0;
+    int fractionsCounter = 0;
     printf("Enter the number greater than 1 : ");
     scanf("%d", &input);
-    writeAllFractions(input);
+    struct Fraction fractions[input / 2 * (input - 1)];
+    getAllFractions(input, fractions, &fractionsCounter);
+    printAllFractions(input, fractions, fractionsCounter);
     return 0;
 }
