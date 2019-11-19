@@ -16,7 +16,7 @@ int* createIntArray(int size)
 
 bool findInArray(int* list, int size, int value)
 {
-    for(int i = 0; i < size; ++i)
+    for (int i = 0; i < size; ++i)
     {
         if (list[i] == value)
         {
@@ -31,10 +31,11 @@ void startTheGame(int number, int *numberArray)
     int input = 0;
     int *inputArray = createIntArray(4);
     int bullNumber = 0;
+    int cowNumber = 0;
     while (bullNumber != 4)
     {
         bullNumber = 0;
-        int cowNumber = 0;
+        cowNumber = 0;
         printf("Enter number : ");
         scanf("%d", &input);
         for (int i = 0; i < 4; ++i)
