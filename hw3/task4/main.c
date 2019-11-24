@@ -1,17 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
-char* createArray(int length)
-{
-    char *list = malloc(length * sizeof(char));
-    for (int i = 0; i < length; ++i)
-    {
-        list[i] = '\0';
-    }
-    return list;
-}
-
-void checkAppropriateUsers(int numberOfActions, int* numbers, int numberOfUsers, int actions, int timer, int* answer)
+bool isAppropriatedUser(int numberOfActions, const int* numbers, int actionsAppropriateNumber, int timer)
 {
     int numberOfAppropriateActions = 0;
     for (int i = 0; i < numberOfActions; i += 2)
@@ -21,33 +12,38 @@ void checkAppropriateUsers(int numberOfActions, int* numbers, int numberOfUsers,
             ++numberOfAppropriateActions;
         }
     }
-    if (numberOfAppropriateActions == actions)
-    {
-        *answer += 1;
-    }
+
+    return numberOfAppropriateActions == actionsAppropriateNumber;
 }
 
-int main() {
+int main()
+{
     int users = 0;
     int actions = 0;
     int timer = 0;
-    int numberOfActions = 0;
-    int *numbers = malloc(numberOfActions * sizeof(int));
     int answer = 0;
-    printf("Enter the values : ");
+    int numberOfActions = 0;
+    printf("Enter the values: ");
+    fflush(stdout);
     scanf("%d %d %d", &users, &actions, &timer);
     for (int i = 0; i < users; ++i)
     {
         printf("Enter the number of actions : ");
+        fflush(stdout);
         scanf("%d", &numberOfActions);
+        int *numbers = malloc(numberOfActions * sizeof(int));
         printf("Enter actions time periods : ");
-        for(int i = 0; i < numberOfActions; ++i)
+        fflush(stdout);
+        for (int j = 0; j < numberOfActions; ++j)
         {
-            scanf("%d", &numbers[i]);
+            scanf("%d", &numbers[j]);
         }
-        checkAppropriateUsers(numberOfActions, numbers, users, actions, timer, &answer);
+        if (isAppropriatedUser(numberOfActions, numbers, actions, timer))
+        {
+            ++answer;
+        }
+        free(numbers);
     }
     printf("The number of appropriate actions is : %d", answer);
-    free(numbers);
     return 0;
 }
