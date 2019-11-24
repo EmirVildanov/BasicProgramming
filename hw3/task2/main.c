@@ -1,49 +1,39 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
-const int maxLineSize = 100;
-const int maxReadingSize = 100;
-
-char* createCharArray(int size)
-{
-    char *list = malloc(maxLineSize * sizeof(char));
-    for (int i = 0; i < size; ++i)
-    {
-        list[i] = '\0';
-    }
-    return list;
-}
 
 int main()
 {
-    FILE *file = fopen("text", "rt");
-    int answer = 0;
-    char *newline = createCharArray(maxLineSize);
+    FILE *file = fopen("text", "r");
+    int numberOfLines = 0;
     if (file == NULL)
     {
-        printf("\nPlease put your file in the build-debug directory");
-        exit(1);
+        printf("\nPlease put your file in the build-debug directory\n");
+        return 1;
     }
-    else
+    int newChar = fgetc(file);
+    while (EOF != newChar)
     {
-        while (!feof(file))
+        while( (char) newChar != '\n' && newChar)
         {
-            if (fgets(newline, maxLineSize, file) != NULL)
+            if ((char) newChar != '\t' &&  (char) newChar != ' ')
             {
-                for (int i = 0; i < strlen(newline); ++i)
+                ++numberOfLines;
+                newChar = fgetc(file);
+                while( (char) newChar != '\n')
                 {
-                    if (newline[i] != '\t' && newline[i] != '\n')
-                    {
-                        ++answer;
-                        break;
-                    }
+                    newChar = fgetc(file);
                 }
+                break;
+            }
+            else
+            {
+                newChar = fgetc(file);
             }
         }
+        newChar = fgetc(file);
     }
     fclose(file);
-    free(newline);
-    printf("The number of non-empty lines in your file is : %d", answer);
+    printf("The number of non-empty lines in your file is : %d", numberOfLines);
     return 0;
 }
