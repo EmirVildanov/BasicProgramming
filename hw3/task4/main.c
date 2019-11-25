@@ -2,18 +2,33 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-bool isAppropriatedUser(int numberOfActions, const int* numbers, int actionsAppropriateNumber, int timer)
+bool isAppropriatedUser(int numberOfActions, const int* actionsArray, int actionsAppropriateNumber, int timer)
 {
     int numberOfAppropriateActions = 0;
     for (int i = 0; i < numberOfActions; i += 2)
     {
-        if (numbers[i] <= timer)
+        if (actionsArray[i] <= timer)
         {
             ++numberOfAppropriateActions;
         }
     }
 
     return numberOfAppropriateActions == actionsAppropriateNumber;
+}
+
+int* getActions(int *numberOfActions)
+{
+    printf("Enter the number of actions : ");
+    fflush(stdout);
+    scanf("%d", numberOfActions);
+    int *numbers = malloc(*numberOfActions * sizeof(int));
+    printf("Enter actions time periods : ");
+    fflush(stdout);
+    for (int j = 0; j < *numberOfActions; ++j)
+    {
+        scanf("%d", &numbers[j]);
+    }
+    return numbers;
 }
 
 int main()
@@ -28,21 +43,12 @@ int main()
     scanf("%d %d %d", &users, &actions, &timer);
     for (int i = 0; i < users; ++i)
     {
-        printf("Enter the number of actions : ");
-        fflush(stdout);
-        scanf("%d", &numberOfActions);
-        int *numbers = malloc(numberOfActions * sizeof(int));
-        printf("Enter actions time periods : ");
-        fflush(stdout);
-        for (int j = 0; j < numberOfActions; ++j)
-        {
-            scanf("%d", &numbers[j]);
-        }
-        if (isAppropriatedUser(numberOfActions, numbers, actions, timer))
+        int *actionsArray = getActions(&numberOfActions);
+        if (isAppropriatedUser(numberOfActions, actionsArray, actions, timer))
         {
             ++answer;
         }
-        free(numbers);
+        free(actionsArray);
     }
     printf("The number of appropriate actions is : %d", answer);
     return 0;
