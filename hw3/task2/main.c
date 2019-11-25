@@ -1,6 +1,26 @@
 #include <stdio.h>
 #include <string.h>
 
+void checkNewLine(FILE* file, int* newChar, int* numberOfLines)
+{
+    while( (char) *newChar != '\n' && *newChar)
+    {
+        if ((char) *newChar != '\t' &&  (char) *newChar != ' ')
+        {
+            ++*numberOfLines;
+            *newChar = fgetc(file);
+            while( (char) *newChar != '\n')
+            {
+                *newChar = fgetc(file);
+            }
+            break;
+        }
+        else
+        {
+            *newChar = fgetc(file);
+        }
+    }
+}
 
 int main()
 {
@@ -14,23 +34,7 @@ int main()
     int newChar = fgetc(file);
     while (EOF != newChar)
     {
-        while( (char) newChar != '\n' && newChar)
-        {
-            if ((char) newChar != '\t' &&  (char) newChar != ' ')
-            {
-                ++numberOfLines;
-                newChar = fgetc(file);
-                while( (char) newChar != '\n')
-                {
-                    newChar = fgetc(file);
-                }
-                break;
-            }
-            else
-            {
-                newChar = fgetc(file);
-            }
-        }
+        checkNewLine(file, &newChar, &numberOfLines);
         newChar = fgetc(file);
     }
     fclose(file);
