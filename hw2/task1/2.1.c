@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 int* createIntArray(int size)
 {
@@ -11,7 +12,15 @@ int* createIntArray(int size)
     return list;
 }
 
-int findNaturalElement(int *list, int length, int start)
+void initializeArray(int* units, int number)
+{
+    for (int i = 0; i < number; ++i)
+    {
+        units[i] = 1;
+    }
+}
+
+int findNaturalElement(const int *list, int length, int start)
 {
     int index = start;
     while (list[index] == 0)
@@ -50,7 +59,7 @@ void moveMaxElement(int *list, int length, int *maxElement, int *maxElementIndex
     }
 }
 
-int findSmallestElementIndex(int *sortedArray, int length)
+int findSmallestElementIndex(const int *sortedArray, int length)
 {
     int index = length - 1;
     while (sortedArray[index - 1] == sortedArray[index])
@@ -60,15 +69,42 @@ int findSmallestElementIndex(int *sortedArray, int length)
     return index;
 }
 
+bool increaseFirstElement(int* units, int maxElement, int number, int maxElementIndex)//returns false if can't increase first element
+{
+    int nextAfterMaxElementIndex = findNaturalElement(units, number, maxElementIndex + 1);
+    if (units[nextAfterMaxElementIndex] + 1 > maxElement || nextAfterMaxElementIndex == number - 1)
+    {
+        return false;
+    }
+    int element = units[nextAfterMaxElementIndex];
+    moveMaxElement(units, number, &element, &nextAfterMaxElementIndex);
+    printTheSum(units, number);
+    return true;
+}
+
+bool transformAfterMaxElement(int* smallestElement, int number, int* units, int maxElement, int maxElementIndex, int* smallestElementIndex)//returns false if can't transform elements after max element
+{
+    if (*smallestElementIndex == number - 1)
+    {
+        if (!increaseFirstElement(units, maxElement, number, maxElementIndex))
+        {
+            return false;
+        }
+    }
+    else
+    {
+        moveMaxElement(units, number, smallestElement, smallestElementIndex);
+        printTheSum(units, number);
+    }
+    return true;
+}
+
 void transformUnits(int number)
 {
     int maxElement = 1;
     int maxElementIndex = 0;
     int *units = createIntArray(number);
-    for (int i = 0; i < number; ++i)
-    {
-        units[i] = 1;
-    }
+    initializeArray(units, number);
     while (maxElement != number)
     {
         printTheSum(units, number);
@@ -76,24 +112,9 @@ void transformUnits(int number)
         {
             int smallestElementIndex = findSmallestElementIndex(units, number);
             int smallestElement = units[smallestElementIndex];
-            if (smallestElementIndex == number - 1)
+            if (!transformAfterMaxElement(&smallestElement, number, units, maxElement, maxElementIndex, &smallestElementIndex))
             {
-                int nextAfterMaxElementIndex = findNaturalElement(units, number, maxElementIndex + 1);
-                if ((units[nextAfterMaxElementIndex] + 1) > maxElement || nextAfterMaxElementIndex == number - 1)
-                {
-                    break;
-                }
-                else
-                {
-                    int element = units[nextAfterMaxElementIndex];
-                    moveMaxElement(units, number, &element, &nextAfterMaxElementIndex);
-                    printTheSum(units, number);
-                }
-            }
-            else
-            {
-                moveMaxElement(units, number, &smallestElement, &smallestElementIndex);
-                printTheSum(units, number);
+                break;
             }
         }
         moveMaxElement(units, number, &maxElement, &maxElementIndex);
@@ -111,4 +132,4 @@ int main()
     transformUnits(input);
     return 0;
 }
-
+;
