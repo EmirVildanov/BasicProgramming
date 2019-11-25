@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "STACK_H.h"
+#include "stack.h"
 
 struct StackElement
 {
@@ -16,38 +16,58 @@ struct Stack
 Stack* createStack()
 {
     Stack* newStack = malloc(sizeof(Stack));
-    newStack ->first = NULL;
+    if (newStack == NULL)
+    {
+    	exit(1);
+    }
+    newStack->first = NULL;
     return newStack;
 }
 
 bool isEmpty(Stack* stack)
 {
-    return stack ->first == NULL;
+    if (stack == NULL)
+    {
+    	exit(1);
+    }
+    return stack->first == NULL;
 }
 
 bool push(char value, Stack* stack)
 {
+    if (stack == NULL)
+    {
+    	exit(1);
+    }
     StackElement* stackElement = (StackElement*) malloc(sizeof(StackElement));
-    stackElement ->value = value;
-    stackElement ->next = stack ->first;
+    stackElement->value = value;
+    stackElement->next = stack->first;
     stack->first = stackElement;
     return true;
 }
 
 char pop(Stack* stack)
 {
+    if (stack == NULL)
+    {
+    	exit(1);
+    }
     if (isEmpty(stack))
     {
         return 0;
     }
-    StackElement* poppedElement = stack ->first;
-    stack ->first = poppedElement ->next;
-    char value = poppedElement ->value;
+    StackElement* poppedElement = stack->first;
+    stack->first = poppedElement->next;
+    char value = poppedElement->value;
     return value;
 }
 
 char getValue(Stack *stack)
 {
+    if (stack == NULL)
+    {
+    	exit(1);
+    }
     return stack->first->value;
 }
 
@@ -59,4 +79,5 @@ void deleteStack(Stack* stack)
         stack->first = currentElement->next;
         free(currentElement);
     }
+    free(stack);
 }

@@ -1,7 +1,4 @@
-#ifndef ARRAY_H
-#define ARRAY_H
+#pragma once
 
 char* createCharArray(int size);
-int* createIntArray(int size);
 
-#endif

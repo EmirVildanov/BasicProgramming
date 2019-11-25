@@ -1,5 +1,5 @@
-#ifndef STACK_H
-#define STACK_H
+#pragma once
+
 #include <stdbool.h>
 struct Stack;
 struct StackElement;
@@ -13,4 +13,4 @@ bool push(char value, Stack *stack);
 char pop(Stack *stack);
 char getValue(Stack *stack);
 void deleteStack(Stack* stack);
-#endif
+

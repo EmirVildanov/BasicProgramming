@@ -3,26 +3,31 @@
 #include <stdbool.h>
 #include <string.h>
 #include "Array.h"
-#include "STACK_H.h"
+#include "stack.h"
 #include "queue.h"
 
-const int maxSize = 100;
+const int maxInputSize = 100;
+
+bool checkInput(const char* line, int length)
+{
+    for (int i = 0; i < length; ++i)
+    {
+        if (line[i] == ' ')
+        {
+            return false;
+        }
+    }
+    return true;
+}
 
 bool checkOperator(char digit)
 {
-    if (digit == '+' || digit == '-' || digit == '*' ||  digit == '/')
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    return digit == '+' || digit == '-' || digit == '*' ||  digit == '/';
 }
 
-int checkPower(char digit)
+int getPriority(char operator)
 {
-    if (digit == '+' || digit ==  '-')
+    if (operator == '+' || operator ==  '-')
     {
         return 1;
     }
@@ -32,39 +37,44 @@ int checkPower(char digit)
     }
 }
 
+void readLineElement(const char* line, Queue* queue, Stack* stack, int index)
+{
+    char digit = line[index];
+    if (!checkOperator(digit) && digit != '(' && digit != ')')
+    {
+        pushToQueue(digit, queue);
+    }
+    else if (digit == '(')
+    {
+        push(digit, stack);
+    }
+    else if (digit == ')')
+    {
+        while (!isEmpty(stack) && getValue(stack) != '(')
+        {
+            pushToQueue(pop(stack), queue);
+        }
+        pop(stack);
+    }
+    else
+    {
+        while (!isEmpty(stack) && checkOperator(getValue(stack)) && getPriority(getValue(stack)) >= getPriority(digit))
+        {
+            pushToQueue(pop(stack), queue);
+        }
+        push(digit, stack);
+    }
+}
+
 char* makePostfix(char* line)
 {
-    int lineLength = strlen(line);
+    int lineLength = strlen(line) - 1;
     char *newLine = createCharArray(lineLength);
     Stack *stack = createStack();
     Queue *queue = createQueue();
     for (int i = 0; i < lineLength; ++i)
     {
-        char digit = line[i];
-        if (!checkOperator(digit) && digit != '(' && digit != ')')
-        {
-            pushToQueue(digit, queue);
-        }
-        else if (digit == '(')
-        {
-            push(digit, stack);
-        }
-        else if (digit == ')')
-        {
-            while (!isEmpty(stack) && getValue(stack) != '(')
-            {
-                pushToQueue(pop(stack), queue);
-            }
-            pop(stack);
-        }
-        else
-        {
-            while (!isEmpty(stack) && checkOperator(getValue(stack)) && checkPower(getValue(stack)) >= checkPower(digit))
-            {
-                pushToQueue(pop(stack), queue);
-            }
-            push(digit, stack);
-        }
+        readLineElement(line, queue, stack, i);
     }
     while(!isEmpty(stack))
     {
@@ -78,16 +88,24 @@ char* makePostfix(char* line)
     }
     deleteQueue(queue);
     deleteStack(stack);
-    return  newLine;
+    return newLine;
 }
 
-int main() {
-    char *line = createCharArray(maxSize);
+int main()
+{
+    char *line = createCharArray(maxInputSize);
     printf("Please, enter your line without spaces : ");
-    scanf("%s", line);
-    char *postfixLine = makePostfix(line);
-    printf("The postfix line is : %s", postfixLine);
+    fgets(line, maxInputSize, stdin);
+    if (checkInput(line, strlen(line)))
+    {
+        char *postfixLine = makePostfix(line);
+        printf("The postfix line is : %s", postfixLine);
+        free(postfixLine);
+    }
+    else
+    {
+        printf("There are spaces in your line\n");
+    }
     free(line);
-    free(postfixLine);
     return 0;
 }
