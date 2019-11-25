@@ -1,6 +1,4 @@
-#ifndef LIST_H
-#define LIST_H
-
+#pragma one
 #include <stdbool.h>
 struct List;
 struct ListElement;
@@ -16,5 +14,3 @@ void changeLifeStatus(ListElement* listElement, bool status);
 ListElement* getFirstListElement(List* list);
 ListElement* getNextElement(ListElement* listElement);
 void deleteList(List* list);
-
-#endif
