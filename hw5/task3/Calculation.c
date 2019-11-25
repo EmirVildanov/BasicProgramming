@@ -1,24 +1,19 @@
 #include "Calculation.h"
 #include <string.h>
-#include "Array.h"
+#include "array.h"
 #include "queue.h"
-#include "STACK_H.h"
-
-bool checkOperator(char digit)
-{
-    bool answer = false;
-    if (digit == '+' || digit == '-' || digit == '*' ||  digit == '/')
-    {
-        answer = true;
-    }
-    return answer;
-}
+#include "stack.h"
 
 //For making into postfix
 
-int checkPower(char digit)
+bool checkOperator(char digit)
 {
-    if (digit == '+' || digit ==  '-')
+    return digit == '+' || digit == '-' || digit == '*' ||  digit == '/';
+}
+
+int getPriority(char operator)
+{
+    if (operator == '+' || operator ==  '-')
     {
         return 1;
     }
@@ -28,39 +23,44 @@ int checkPower(char digit)
     }
 }
 
+void readLineElement(const char* line, Queue* queue, Stack* stack, int index)
+{
+    char digit = line[index];
+    if (!checkOperator(digit) && digit != '(' && digit != ')')
+    {
+        pushToQueue(digit, queue);
+    }
+    else if (digit == '(')
+    {
+        push(digit, stack);
+    }
+    else if (digit == ')')
+    {
+        while (!isEmpty(stack) && getValue(stack) != '(')
+        {
+            pushToQueue(pop(stack), queue);
+        }
+        pop(stack);
+    }
+    else
+    {
+        while (!isEmpty(stack) && checkOperator(getValue(stack)) && getPriority(getValue(stack)) >= getPriority(digit))
+        {
+            pushToQueue(pop(stack), queue);
+        }
+        push(digit, stack);
+    }
+}
+
 char* makePostfix(char* line)
 {
-    int lineLength = strlen(line);
+    int lineLength = strlen(line) - 1;
     char *newLine = createCharArray(lineLength);
     Stack *stack = createStack();
     Queue *queue = createQueue();
     for (int i = 0; i < lineLength; ++i)
     {
-        char digit = line[i];
-        if (!checkOperator(digit) && digit != '(' && digit != ')')
-        {
-            pushToQueue(digit, queue);
-        }
-        else if (digit == '(')
-        {
-            push(digit, stack);
-        }
-        else if (digit == ')')
-        {
-            while (!isEmpty(stack) && getValue(stack) != '(')
-            {
-                pushToQueue(pop(stack), queue);
-            }
-            pop(stack);
-        }
-        else
-        {
-            while (!isEmpty(stack) && checkOperator(getValue(stack)) && checkPower(getValue(stack)) >= checkPower(digit))
-            {
-                pushToQueue(pop(stack), queue);
-            }
-            push(digit, stack);
-        }
+        readLineElement(line, queue, stack, i);
     }
     while(!isEmpty(stack))
     {
@@ -74,7 +74,7 @@ char* makePostfix(char* line)
     }
     deleteCharStack(stack);
     deleteQueue(queue);
-    return  newLine;
+    return newLine;
 }
 
 //For calculating
@@ -117,7 +117,7 @@ float calculateLine(char* line)
         {
             float firstDigit = popFloatStack(floatStack);
             float secondDigit = popFloatStack(floatStack);
-            float result =  doOperation(digit, firstDigit, secondDigit);
+            float result = doOperation(digit, firstDigit, secondDigit);
             pushFloatStack(result, floatStack);
         }
     }
@@ -125,5 +125,3 @@ float calculateLine(char* line)
     deleteFloatStack(floatStack);
     return result;
 }
-
-

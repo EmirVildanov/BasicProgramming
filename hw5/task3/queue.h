@@ -1,5 +1,4 @@
-#ifndef QUEUE_H
-#define QUEUE_H
+#pragma once
 
 #include <stdbool.h>
 
@@ -10,12 +9,9 @@ typedef struct QueueElement QueueElement;
 typedef struct Queue Queue;
 
 Queue* createQueue();
-QueueElement* createQueueElement(Queue* queue, int value);
+QueueElement* createQueueElement(Queue* queue, char value);
 bool isEmptyQueue(Queue *queue);
-void pushToQueue(int value, Queue *queue);
-void front(Queue* queue);
-bool addToQueue();
+void pushToQueue(char value, Queue *queue);
 char popFromQueue(Queue* queue);
-int size(Queue *queue);
 void deleteQueue(Queue *queue);
-#endif
+

@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "STACK_H.h"
+#include "stack.h"
 
 //For stack with char elements
 
@@ -18,38 +18,58 @@ struct Stack
 Stack* createStack()
 {
     Stack* newStack = malloc(sizeof(Stack));
-    newStack ->first = NULL;
+    if (newStack == NULL)
+    {
+    	exit(1);
+    }
+    newStack->first = NULL;
     return newStack;
 }
 
 bool isEmpty(Stack* stack)
 {
-    return stack ->first == NULL;
+    if (stack == NULL)
+    {
+    	exit(1);
+    }
+    return stack->first == NULL;
 }
 
 bool push(char value, Stack* stack)
 {
+    if (stack == NULL)
+    {
+    	exit(1);
+    }
     StackElement* stackElement = (StackElement*) malloc(sizeof(StackElement));
-    stackElement ->value = value;
-    stackElement ->next = stack ->first;
+    stackElement->value = value;
+    stackElement->next = stack->first;
     stack->first = stackElement;
     return true;
 }
 
 char pop(Stack* stack)
 {
+    if (stack == NULL)
+    {
+    	exit(1);
+    }
     if (isEmpty(stack))
     {
         return 0;
     }
-    StackElement* poppedElement = stack ->first;
-    stack ->first = poppedElement ->next;
-    char value = poppedElement ->value;
+    StackElement* poppedElement = stack->first;
+    stack->first = poppedElement->next;
+    char value = poppedElement->value;
     return value;
 }
 
 char getValue(Stack *stack)
 {
+    if (stack == NULL)
+    {
+    	exit(1);
+    }
     return stack->first->value;
 }
 
@@ -61,8 +81,8 @@ void deleteCharStack(Stack* stack)
         stack->first = currentElement->next;
         free(currentElement);
     }
+    free(stack);
 }
-
 
 //For stack with float elements
 
@@ -80,39 +100,51 @@ struct FloatStack
 FloatStack* createFloatStack()
 {
     FloatStack* newFloatStack = malloc(sizeof(FloatStack));
-    newFloatStack ->first = NULL;
+    if (newFloatStack == NULL)
+    {
+    	exit(1);
+    }
+    newFloatStack->first = NULL;
     return newFloatStack;
 }
 
 bool isEmptyFloatStack(FloatStack* floatStack)
 {
-    return floatStack ->first == NULL;
+    if (floatStack == NULL)
+    {
+    	exit(1);
+    }
+    return floatStack->first == NULL;
 }
 
 bool pushFloatStack(float value, FloatStack* floatStack)
 {
+    if (floatStack == NULL)
+    {
+    	exit(1);
+    }
     FloatStackElement* floatStackElement = (FloatStackElement*) malloc(sizeof(FloatStackElement));
-    floatStackElement ->value = value;
-    floatStackElement ->next = floatStack ->first;
+    floatStackElement->value = value;
+    floatStackElement->next = floatStack->first;
     floatStack->first = floatStackElement;
     return true;
 }
 
 float popFloatStack(FloatStack* floatStack)
 {
+    if (floatStack == NULL)
+    {
+    	exit(1);
+    }
     if (isEmptyFloatStack(floatStack))
     {
         return 0;
     }
-    FloatStackElement* poppedElement = floatStack ->first;
-    floatStack ->first = poppedElement ->next;
-    float value = poppedElement ->value;
+    FloatStackElement* poppedElement = floatStack->first;
+    floatStack->first = poppedElement->next;
+    float value = poppedElement->value;
+    free(poppedElement);
     return value;
-}
-
-float getFloatValue(FloatStack *floatStack)
-{
-    return floatStack->first->value;
 }
 
 void deleteFloatStack(FloatStack* stack)
@@ -123,4 +155,5 @@ void deleteFloatStack(FloatStack* stack)
         stack->first = currentElement->next;
         free(currentElement);
     }
+    free(stack);
 }

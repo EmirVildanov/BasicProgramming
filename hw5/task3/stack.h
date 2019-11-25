@@ -1,6 +1,7 @@
-#ifndef STACK_H
-#define STACK_H
+#pragma once
+
 #include <stdbool.h>
+
 //For stack with char elements
 struct Stack;
 struct StackElement;
@@ -27,6 +28,4 @@ FloatStack* createFloatStack();
 bool isEmptyFloatStack(FloatStack *floatStack);
 bool pushFloatStack(float value, FloatStack *floatStack);
 float popFloatStack(FloatStack *floatStack);
-float getFloatValue(FloatStack *floatStack);
 void deleteFloatStack(FloatStack* stack);
-#endif
