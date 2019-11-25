@@ -1,8 +1,7 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include "List.h"
 
-ListElement* findAliveUnit(List* list, ListElement* currentUnit)
+ListElement* findAliveUnit(ListElement* currentUnit)
 {
     while (!checkLifeStatus(currentUnit))
     {
@@ -11,14 +10,14 @@ ListElement* findAliveUnit(List* list, ListElement* currentUnit)
     return currentUnit;
 }
 
-ListElement* killUnit(List* list, int everyUnit, ListElement *currentUnit)
+ListElement* killUnit(int everyUnit, ListElement *currentUnit)
 {
     for (int i = 0; i < everyUnit - 1; ++i)
     {
-        currentUnit = findAliveUnit(list, getNextElement(currentUnit));
+        currentUnit = findAliveUnit(getNextElement(currentUnit));
     }
     changeLifeStatus(currentUnit, false);
-    return findAliveUnit(list, getNextElement(currentUnit));
+    return findAliveUnit(getNextElement(currentUnit));
 }
 
 int findPosition(int unitsNumber, int everyUnit)
@@ -31,15 +30,16 @@ int findPosition(int unitsNumber, int everyUnit)
     ListElement *currentUnit = getFirstListElement(list);
     for (int i = 0; i < unitsNumber - 1; ++i)
     {
-        currentUnit = killUnit(list, everyUnit, currentUnit);
+        currentUnit = killUnit(everyUnit, currentUnit);
     }
-    ListElement* winner = findAliveUnit(list, currentUnit);
-    int answer = getValue(winner);
+    ListElement* winner = findAliveUnit(currentUnit);
+    int goodPositionIndex = getValue(winner);
     deleteList(list);
-    return answer;
+    return goodPositionIndex;
 }
 
-int main() {
+int main()
+{
     int numberOfUnits = 0;
     int everyUnit = 0;
     printf("Enter the number of units : ");
