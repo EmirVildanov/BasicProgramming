@@ -1,110 +1,138 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 
-int** createArray(int size)
+int** createInputArray(int size)
 {
-    int** list = malloc(size * sizeof(int*));
+    int** array = (int**) malloc(size * sizeof(int*));
+    if (array == NULL)
+    {
+        exit(1);
+    }
     for (int i = 0; i < size; ++i)
     {
-        list[i] = (int*) malloc(size * sizeof(int));
+        array[i] = (int*) malloc(size * sizeof(int));
+        if (array[i] == NULL)
+        {
+            exit(1);
+        }
         printf("(New line) ");
         for (int j = 0; j < size; ++j)
         {
             printf("Enter new element of the array : ");
-            scanf("%d", &list[i][j]);
+            scanf("%d", &array[i][j]);
         }
     }
-    return list;
+    return array;
 }
 
-void moveRight(int **list, int *currentElementIndex1, int *currentElementIndex2, bool direction, int length)
+int* createIntArray(int size)
 {
-    for (int i = 0; i < length; ++i)
+    int *array = (int*) malloc(size * sizeof(int));
+    if (array == NULL)
     {
-        *currentElementIndex2 += 1;
-        printf("%d ", list[*currentElementIndex1][*currentElementIndex2]);
+        exit(1);
     }
+    for (int i = 0; i < size; ++i)
+    {
+        array[i] = 0;
+    }
+    return array;
 }
 
-void moveUp(int **list, int *currentElementIndex1, int *currentElementIndex2, bool direction, int length)
+void printArray(int** array, int size)
 {
-    for (int i = 0; i < length; ++i)
+    for (int i = 0; i < size; ++i)
     {
-        *currentElementIndex1 -= 1;
-        printf("%d ", list[*currentElementIndex1][*currentElementIndex2]);
-    }
-}
-
-void moveLeft(int **list, int *currentElementIndex1, int *currentElementIndex2, bool direction, int length)
-{
-    for (int i = 0; i < length; ++i)
-    {
-        *currentElementIndex2 -= 1;
-        printf("%d ", list[*currentElementIndex1][*currentElementIndex2]);
-    }
-}
-
-void moveDown(int **list, int *currentElementIndex1, int *currentElementIndex2, bool direction, int length)
-{
-    for (int i = 0; i < length; ++i)
-    {
-        *currentElementIndex1 += 1;
-        printf("%d ", list[*currentElementIndex1][*currentElementIndex2]);
-    }
-}
-
-void moveNumber(int **list, int *currentElementIndex1, int *currentElementIndex2, bool direction, int length, int number)
-{
-    if (direction)
-    {
-        moveRight(list, currentElementIndex1, currentElementIndex2, direction, length);
-        moveUp(list, currentElementIndex1, currentElementIndex2, direction, length);
-    }
-    else
-    {
-        moveLeft(list, currentElementIndex1, currentElementIndex2, direction, length);
-        moveDown(list, currentElementIndex1, currentElementIndex2, direction, length);
-    }
-    if (length == number - 1)
-    {
-        moveRight(list, currentElementIndex1, currentElementIndex2, direction, length);
-    }
-}
-
-void printSpiral(int **list, int length)
-{
-    printf("The first view of your array : \n");
-    for (int i = 0; i < length; ++i)
-    {
-        for (int j = 0; j < length; ++j)
+        for (int j = 0; j < size; ++j)
         {
-            printf("%d ", list[i][j]);
+            printf("%d", array[i][j]);
         }
         printf("\n");
     }
-    printf("The spiral view of your array is : ");
-    bool rightUpDirection = true;
-    int lineIndex = length / 2;
-    int columnIndex = length / 2;
-    printf("%d ", list[lineIndex][columnIndex]);
-    for (int i = 1; i < length; ++i)
+}
+
+void printSpiralArray(int* array, int size)
+{
+    for (int i = 0; i < size; ++i)
     {
-        moveNumber(list, &lineIndex, &columnIndex, rightUpDirection, i, length);
-        rightUpDirection = !rightUpDirection;
+        printf("%d ", array[i]);
+    }
+    printf("\n");
+}
+
+void freeArray(int** array, int side)
+{
+    if (array == NULL)
+    {
+        exit(1);
+    }
+    for (int i = 0; i < side; ++i)
+    {
+        if (array[i] == NULL)
+        {
+            exit(1);
+        }
+        free(array[i]);
+    }
+    free(array);
+}
+
+void addToSpiralArray(int** list, int currentElementIndex1, int currentElementIndex2, int* spiralArray, int* spiralArrayIndex)
+{
+    ++*spiralArrayIndex;
+    spiralArray[*spiralArrayIndex] = list[currentElementIndex1][currentElementIndex2];
+}
+
+void moveNumber(int **list, int* spiralArray, int *currentElementIndex1, int *currentElementIndex2, int direction, int length, int side, int* spiralArrayIndex)
+{
+    for (int i = 0; i < length; ++i)//move horizontally
+    {
+        *currentElementIndex2 += direction;
+        addToSpiralArray(list, *currentElementIndex1, *currentElementIndex2, spiralArray, spiralArrayIndex);
+    }
+    for (int i = 0; i < length; ++i)//move upright
+    {
+        *currentElementIndex1 -= direction;
+        addToSpiralArray(list, *currentElementIndex1, *currentElementIndex2, spiralArray, spiralArrayIndex);
+    }
+    if (length == side - 1)//moves numbers of the last array column
+    {
+        for (int i = 0; i < length; ++i)
+        {
+            *currentElementIndex2 -= direction;
+            addToSpiralArray(list, *currentElementIndex1, *currentElementIndex2, spiralArray, spiralArrayIndex);
+        }
     }
 }
 
-int main() {
-    int number = 0;
-    printf("Enter the number : ");
-    scanf("%d", &number);
-    int **numbers = createArray(number);
-    printSpiral(numbers, number);
-    for (int i = 0; i < number; ++i)
+int* getSpiral(int **list, int side)
+{
+    int rightUpDirection = 1;// if 1 it moves right/up, if -1  moves left/down
+    int lineIndex = side / 2;
+    int columnIndex = side / 2;
+    int *spiralGettingArray = createIntArray(side * side);
+    int spiralArrayIndex = 0;
+    spiralGettingArray[spiralArrayIndex] = list[lineIndex][columnIndex];
+    for (int i = 1; i < side; ++i)
     {
-        free(numbers[i]);
+        moveNumber(list, spiralGettingArray, &lineIndex, &columnIndex, rightUpDirection, i, side, &spiralArrayIndex);
+        rightUpDirection *= -1;
     }
-    free(numbers);
+    return spiralGettingArray;
+}
+
+int main()
+{
+    int side = 0;//side of the array
+    printf("Enter the side power : ");
+    scanf("%d", &side);
+    int **numbers = createInputArray(side);
+    int *spiralArray = getSpiral(numbers, side);
+    printf("The first view of your array:\n");
+    printArray(numbers, side);
+    printf("The spiral view of your array is:\n");
+    printSpiralArray(spiralArray, side * side);
+    freeArray(numbers, side);
+    free(spiralArray);
     return 0;
 }
