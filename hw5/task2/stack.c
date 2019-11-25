@@ -59,6 +59,7 @@ float popFloatStack(FloatStack* floatStack)
     FloatStackElement* poppedElement = floatStack->first;
     floatStack->first = poppedElement->next;
     float value = poppedElement->value;
+    free(poppedElement);
     return value;
 }
 

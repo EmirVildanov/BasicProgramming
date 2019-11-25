@@ -66,7 +66,7 @@ float calculateLine(char* line)
         {
             float firstDigit = popFloatStack(stack);
             float secondDigit = popFloatStack(stack);
-            float result =  doOperation(digit, firstDigit, secondDigit);
+            float result = doOperation(digit, firstDigit, secondDigit);
             pushFloatStack(result, stack);
         }
     }
