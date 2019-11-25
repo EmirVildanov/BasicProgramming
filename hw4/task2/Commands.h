@@ -1,9 +1,5 @@
-#ifndef INC_4_2_COMMANDS_H
-#define INC_4_2_COMMANDS_H
-#include "Commands.h"
+#pragma once
 #include "List.h"
 
-void readCommand(List* list, int input, int* numberIndex, int rememberNumbersNumber, FILE* file, int maxBookSize, int maxNameSize);
+void readCommand(List* list, int input, int rememberLastNumberIndex, FILE* file, int maxInputSize);
 void entrance();
-
-#endif
