@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <locale.h>
 #include <wchar.h>
-#include "Array.h"
+#include "array.h"
 
 const int maxInputSize = 13;
 const int maxArraySize = 5;
@@ -19,7 +19,7 @@ int findIntPower(int number, int power)
         result *= number;
     }
     return result;
-}
+}//because usual math.h functions don't work without linking libraries
 
 float findFloatPower(float number, int power)
 {
@@ -31,7 +31,7 @@ float findFloatPower(float number, int power)
     return number;
 }
 
-int makePower(int* array, int length)
+int findPowerFromBinary(int *array, int length)
 {
     int result = 0;
     for (int i = 0; i < length; ++i)
@@ -41,7 +41,7 @@ int makePower(int* array, int length)
     return result;
 }
 
-float makeMantissa(int* array, int length)
+float makeMantissa(const int *array, int length)
 {
     float result = 1;
     for (int i = 0; i < length; ++i)
@@ -54,11 +54,7 @@ float makeMantissa(int* array, int length)
 wchar_t makeAppropriatePower(int currentDigit)
 {
     wchar_t powerDigit = L' ';
-    if (currentDigit == 0)
-    {
-        powerDigit = 0x2070;
-    }
-    else if (currentDigit == 1)
+    if (currentDigit == 1)
     {
         powerDigit = 0x00B9;
     }
@@ -77,7 +73,28 @@ wchar_t makeAppropriatePower(int currentDigit)
     return powerDigit;
 }
 
-void divideBinaryDouble(unsigned char* doubleNumberPointer, int* sign, int* exponent, int* mantissa)
+void checkPowerSign(int *power)
+{
+    if (*power < 0)
+    {
+        *power *= -1;
+        wchar_t powerSign = 0x207B;
+        wprintf(L"%lc", powerSign);
+    }
+}
+
+void getPowerArray(int *powerDigitsArray, int *arrayIndex, int *power)
+{
+    while (*power != 0)
+    {
+        int newDigit = *power % 10;
+        powerDigitsArray[*arrayIndex] = newDigit;
+        ++*arrayIndex;
+        *power /= 10;
+    }
+}
+
+void divideBinaryDouble(const unsigned char *doubleNumberPointer, int *sign, int *exponent, int *mantissa)
 {
     int bitNumber = 0;
     int arrayIndex = 0;
@@ -112,50 +129,50 @@ void divideBinaryDouble(unsigned char* doubleNumberPointer, int* sign, int* expo
     }
 }
 
-void printExponential(double number)
+void printResult(char signChar, float mantissa, int *power)
 {
-    unsigned char *doubleNumberPointer = (unsigned char*)&number;
-    int sign = 0;
-    int *exponent = createIntArray(exponentSize);
-    int *mantissa = createIntArray(mantissaSize);
-    divideBinaryDouble(doubleNumberPointer, &sign, exponent, mantissa);
-    int exponentPower= makePower(exponent, exponentSize);
-    float resultMantissa = makeMantissa(mantissa, mantissaSize);
-    int power = exponentPower - 1023;
-    char signChar = '+';
-    if (sign == 1)
-    {
-        signChar = '-';
-    }
-    wprintf(L"Result: %c%f*2", signChar, resultMantissa);
-    if (power < 0)
-    {
-        power = power * -1;
-        wchar_t powerSign = 0x207B;
-        wprintf(L"%lc", powerSign);
-    }
-    wchar_t powerDigit = L' ';
     int *powerDigitsArray = createIntArray(maxArraySize);
-    int arrayIndex = 0;
-    while (power != 0)
-    {
-        int newDigit = power % 10;
-        powerDigitsArray[arrayIndex] = newDigit;
-        ++arrayIndex;
-        power /= 10;
-    }
-    for (int i = arrayIndex - 1; i >= 0; --i)
+    int powerArrayIndex = 0;
+    wchar_t powerDigit = L' ';
+
+    wprintf(L"Result: %c%f*2", signChar, mantissa);
+    checkPowerSign(power);//changes power sign in case of negative number and prints it
+
+    getPowerArray(powerDigitsArray, &powerArrayIndex, power);//makes array from the power to print it later
+    for (int i = powerArrayIndex - 1; i >= 0; --i)
     {
         int currentDigit = powerDigitsArray[i];
         powerDigit = makeAppropriatePower(currentDigit);
         wprintf(L"%lc", powerDigit);
     }
-    free(exponent);
-    free(mantissa);
     free(powerDigitsArray);
 }
 
-int main() {
+void printExponential(double number)
+{
+    unsigned char *doubleNumberPointer = (unsigned char *) &number;
+    int sign = 0;
+    int *exponent = createIntArray(exponentSize);
+    int *mantissa = createIntArray(mantissaSize);
+    divideBinaryDouble(doubleNumberPointer, &sign, exponent, mantissa);//will package different bites in the appropriate array
+    int power = findPowerFromBinary(exponent, exponentSize) - 1023;
+    if (power == -1023)
+    {
+        wprintf(L"Result: 0");
+        return;
+    }
+    char signChar = '+';
+    if (sign == 1)
+    {
+        signChar = '-';
+    }
+    printResult(signChar, makeMantissa(mantissa, mantissaSize), &power);
+    free(exponent);
+    free(mantissa);
+}
+
+int main()
+{
     setlocale(LC_CTYPE, "");
     char *inputLine = createCharArray(maxInputSize);
     wprintf(L"Enter a number : ");
