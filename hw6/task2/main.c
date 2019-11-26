@@ -1,10 +1,31 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "Array.h"
+#include <string.h>
+#include "array.h"
 
 const int maxSize = 8;
+const int maxInputSize = 3;
 
-void reverseNumber(int* array, int length)
+int getInput(int size)
+{
+    char *input = createCharArray(size + 1);// size + 1 to capture '\n' symbol
+    printf("Enter number(less than 256) : ");
+    fgets(input, size + 1, stdin);
+    int number = (int) strtol(input, NULL, 10);
+    free(input);
+    return number;
+}
+
+void checkInput(int number)
+{
+    if (number > 256)
+    {
+        printf("Your number is greater than 255\n");
+        exit(1);
+    }
+}
+
+void reverseNumber(int *array, int length)
 {
     for (int i = 0; i < length / 2; ++i)
     {
@@ -14,7 +35,7 @@ void reverseNumber(int* array, int length)
     }
 }
 
-int* makeBinary(int number, int* length) //Also prints the binary view to save space
+int *makeBinary(int number)
 {
     int *binaryArray = createIntArray(maxSize);
     int digitPower = 0;
@@ -24,58 +45,52 @@ int* makeBinary(int number, int* length) //Also prints the binary view to save s
         number /= 2;
         digitPower += 1;
     }
-    *length = digitPower;
-    for (int i = maxSize - 1; i >= 0; --i)
+    reverseNumber(binaryArray, maxSize);
+    return binaryArray;
+}
+
+void printBinary(int *binaryArray, int size)
+{
+    for (int i = 0; i < size; ++i)
     {
         printf("%d", binaryArray[i]);
     }
     printf("\n");
-    return binaryArray;
 }
 
-int* getSum(int* firstNumber, int* secondNumber)
+int *getBinarySum(const int *firstNumber, const int *secondNumber)
 {
     int *binarySum = createIntArray(maxSize + 1);
     int sumDigit = 0;
-    for (int i = 0; i < maxSize; ++i)
+    for (int i = maxSize - 1; i > 0; --i)
     {
         int digitsSum = firstNumber[i] + secondNumber[i];
-        binarySum[i] = digitsSum % 2 + sumDigit;
-        sumDigit = digitsSum / 2;
+        binarySum[i + 1] = (digitsSum + sumDigit) % 2;
+        sumDigit = (digitsSum + sumDigit) / 2;
     }
-    binarySum[maxSize] = sumDigit;
-    reverseNumber(binarySum, maxSize + 1);
+    binarySum[0] = sumDigit;
     return binarySum;
 }
 
-void printBinaryView(int firstNumber, int secondNumber)
+int main()
 {
-    int firstNumberLength = 0;
-    int secondNumberLength = 0;
+    int firstNumber = getInput(maxInputSize);
+    checkInput(firstNumber);
+    int *firstBinaryNumber = makeBinary(firstNumber);
+    int secondNumber = getInput(maxInputSize);
+    checkInput(secondNumber);
+    int *secondBinaryNumber = makeBinary(secondNumber);
     printf("The binary view of the first number is : ");
-    int *firstBinaryNumber = makeBinary(firstNumber, &firstNumberLength);
+    printBinary(firstBinaryNumber, maxSize);
     printf("The binary view of the second number is : ");
-    int *secondBinaryNumber = makeBinary(secondNumber, & secondNumberLength);
-    int* binarySum = getSum(firstBinaryNumber, secondBinaryNumber);
+    printBinary(secondBinaryNumber, maxSize);
+    int *binarySum = getBinarySum(firstBinaryNumber, secondBinaryNumber);
     printf("The decimal sum is : %d \n", firstNumber + secondNumber);
     printf("The binary sum is : ");
-    for (int i = 0; i < maxSize + 1; ++i)
-    {
+    printBinary(binarySum, maxSize + 1);
 
-        printf("%d", binarySum[i]);
-    }
+    free(binarySum);
     free(firstBinaryNumber);
     free(secondBinaryNumber);
-    free(binarySum);
-}
-
-int main() {
-    int firstNumber = 0;
-    int secondNumber = 0;
-    printf("Enter first number(less than 256) : ");
-    scanf("%d", &firstNumber);
-    printf("Enter second number(less than 256) : ");
-    scanf("%d", &secondNumber);
-    printBinaryView(firstNumber, secondNumber);
     return 0;
 }
