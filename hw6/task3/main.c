@@ -7,7 +7,6 @@
  *  void checkElement(Set* set, int value); // printing if your element in the set
  *  void printSet(Set* set);
  */
-#include <stdio.h>
 #include <stdlib.h>
 #include "Set.h"
 #include "array.h"
