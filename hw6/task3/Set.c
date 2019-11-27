@@ -45,6 +45,10 @@ SetElement *createSetElement(int value)
 
 int getSetSize(Set* set)
 {
+    if (set == NULL)
+    {
+        exit(1);
+    }
     return set->size;
 }
 
