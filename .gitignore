@@ -1,5 +1,5 @@
 *.o
-.cmake
-.txt
+*.cmake
+*.txt
 /**/cmake-build-debug/
-.idea/*
+idea/*
