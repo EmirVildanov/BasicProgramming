@@ -1,5 +1,5 @@
 #include <stdlib.h>
-#include "Array.h"
+#include "array.h"
 
 char* createCharArray(size)
 {

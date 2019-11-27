@@ -8,32 +8,46 @@
  *  void printSet(Set* set);
  */
 
-#include <stdio.h>
-#include "Array.h"
+#include <stdlib.h>
+#include "array.h"
 #include "Set.h"
 
-const int maxSize = 10;
 
-int main() {
+int main()
+{
     Set *set = createSet();
-    int *increasingArray = createIntArray(maxSize);
-    int *decreasingArray = createIntArray(maxSize);
-    int sizeOfArray = 0;
     addToSet(set, 2);
     addToSet(set, 3);
     addToSet(set, 9);
     addToSet(set, 5);
     addToSet(set, 8);
     addToSet(set, 4);
-    //Checking deleting work properly
-    checkElement(set, 8);
-    deleteElement(set, 8);
-    checkElement(set, 8);
-    //Checking increasing output
-    getInIncreasingOrder(set, increasingArray, &sizeOfArray); // collecting in the array
-    //Checking decreasing output
-    getInDecreasingOrder(set, decreasingArray, &sizeOfArray); // collecting in the array
+    addToSet(set, 10);
+    addToSet(set, 11);
+    addToSet(set, 15);
+
     //Checking printing whole set
     printSet(set);
+
+    //Checking deleting work properly
+    checkElement(set, 10);
+    deleteElement(set, 10);
+    deleteElement(set, 8);
+    checkElement(set, 10);
+
+    int setSize = getSetSize(set);
+    //Checking increasing output
+    int *increasingArray = createIntArray(setSize);
+    getInIncreasingOrder(set, increasingArray); // collecting in the array
+
+    //Checking decreasing output
+    int *decreasingArray = createIntArray(setSize);
+    getInDecreasingOrder(set, decreasingArray); // collecting in the array
+
+    printSet(set);
+
+    free(increasingArray);
+    free(decreasingArray);
+    deleteSet(set);
     return 0;
 }

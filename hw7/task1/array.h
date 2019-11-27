@@ -1,5 +1,4 @@
-#ifndef ARRAY_H
-#define ARRAY_H
+#pragma once
 
 char* createCharArray(int size);
 int* createIntArray(int size);
@@ -9,4 +8,3 @@ void printCharArray(char* array, int length);
 void printIntArray(int* array, int length);
 void printFloatArray(float* array, int length);
 
-#endif
