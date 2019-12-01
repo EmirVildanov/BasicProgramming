@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-const int maxSize = 100;
-
 int* createArray(int size)
 {
     int* newList = malloc(size * sizeof(int));
@@ -44,13 +42,15 @@ void moveZeros(int list[], int length)
 
 int main()
 {
-    int *numbers = createArray(maxSize);
     int length = 0;
     printf("Enter the length of your array : ");
+    fflush(stdout);
     scanf("%d", &length);
+    int *numbers = createArray(length);
     for (int i = 0; i < length; ++i)
     {
         printf("Enter new element of the array : ");
+        fflush(stdout);
         scanf("%d", &numbers[i]);
     }
     moveZeros(numbers, length);
