@@ -127,7 +127,11 @@ int main()
 {
     int input = 0;
     printf("Enter the number : ");
-    scanf("%d,", &input);
+    while (scanf("%d", &input) == 0)
+    {
+        scanf("%*[^\n]");
+        printf("Please enter the number other symbols : ");
+    }
     printf("Number %d also may be represented as : \n", input);
     transformUnits(input);
     return 0;
