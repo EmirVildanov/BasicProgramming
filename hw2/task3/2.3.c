@@ -52,16 +52,21 @@ int power(int number, int power)
     return result;
 }
 
-void newInput(int* inputArray, int input)
+void newInput(int* inputArray, int *input)
 {
-    scanf("%d", &input);
+    while (scanf("%d", input) == 0 || *input < 1000)
+    {
+        scanf("%*[^\n]");
+        printf("Your input is incorrect. Enter new number: ");
+    }
     for (int i = 0; i < numberSize; ++i)
     {
-        inputArray[i] = (input / power(10, numberSize - 1 - i)) % 10;
+        inputArray[i] = (*input / power(10, numberSize - 1 - i)) % 10;
     }
+    scanf("%*[^\n]");
 }
 
-void startTheGame(int number, int *numberArray)
+void startTheGame(int *numberArray)
 {
     int input = 0;
     int *inputArray = createIntArray(numberSize);
@@ -70,12 +75,12 @@ void startTheGame(int number, int *numberArray)
     {
         bullNumber = 0;
         int cowNumber = 0;
-        printf("Enter the number: ");
-        newInput(inputArray, input);
+        printf("Enter the four-digit number(digits are repeated once) : ");
+        newInput(inputArray, &input);
         while(checkWrongInput(inputArray))
         {
             printf("Digits are repeated once. Enter the number again: ");
-            newInput(inputArray, input);
+            newInput(inputArray, &input);
         }
         for (int i = 0; i < numberSize; ++i)
         {
@@ -113,7 +118,7 @@ int main()
     }
     printf("\n");
     printf("Let's start the game \n");
-    startTheGame(number, numberArray);
+    startTheGame(numberArray);
     free(numberArray);
     return 0;
 }
