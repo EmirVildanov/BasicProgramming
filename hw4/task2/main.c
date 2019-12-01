@@ -25,7 +25,7 @@ int main()
     readFile(file, numberList);
     entrance(); //print entrance lines
     scanf("%d", &input);
-    int lastNumberIndex = numberList->size;
+    int lastNumberIndex = getListSize(numberList);
     while (input != 0)
     {
         readCommand(numberList, input, lastNumberIndex - 1, file, maxInputSize);

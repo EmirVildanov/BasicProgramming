@@ -43,7 +43,7 @@ void readCommand(List* list, int input, int rememberLastNumberIndex, FILE* file,
         {
             printf("You added number: %s_%s \n", name, number);
             addNew(list, number, name);
-            ++list->size;
+            changeListSize(list, getListSize(list) + 1);
         }
         else if (checkingAnswer == 1)
         {
@@ -88,11 +88,11 @@ void readCommand(List* list, int input, int rememberLastNumberIndex, FILE* file,
     }
     else if (input == 4)
     {
-        ListElement *currentElement = list->first;
-        while(currentElement->numberIndex != rememberLastNumberIndex)
+        ListElement *currentElement = getListFirst(list);
+        while(getNumberIndex(currentElement) != rememberLastNumberIndex)
         {
-            fprintf(file, "%s %s \n", currentElement->name, currentElement->number);
-            currentElement = currentElement->next;
+            fprintf(file, "%s %s \n", getName(currentElement), getNumber(currentElement));
+            currentElement = getNext(currentElement);
         }
     }
     else

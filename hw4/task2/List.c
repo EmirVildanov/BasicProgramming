@@ -4,6 +4,20 @@
 #include "List.h"
 #include "Array.h"
 
+struct ListElement
+{
+    int numberIndex;
+    char *number;
+    char *name;
+    ListElement* next;
+};
+
+struct List
+{
+    ListElement* first;
+    int size;
+};
+
 List* createList()
 {
     List* newList = malloc(sizeof(List));
@@ -24,6 +38,69 @@ ListElement* createListElement()
         exit(1);
     }
     return newListElement;
+}
+
+int getListSize(List *list)
+{
+    if (list == NULL)
+    {
+        exit(1);
+    }
+    return list->size;
+}
+
+ListElement *getListFirst(List *list)
+{
+    if (list == NULL)
+    {
+        exit(1);
+    }
+    return list->first;
+}
+
+void changeListSize(List *list, int value)
+{
+    if (list == NULL)
+    {
+        exit(1);
+    }
+    list->size = value;
+}
+
+int getNumberIndex(ListElement *listElement)
+{
+    if (listElement == NULL)
+    {
+        exit(1);
+    }
+    return listElement->numberIndex;
+}
+
+char *getNumber(ListElement *listElement)
+{
+    if (listElement == NULL)
+    {
+        exit(1);
+    }
+    return listElement->number;
+}
+
+char *getName(ListElement *listElement)
+{
+    if (listElement == NULL)
+    {
+        exit(1);
+    }
+    return listElement->name;
+}
+
+ListElement *getNext(ListElement *listElement)
+{
+    if (listElement == NULL)
+    {
+        exit(1);
+    }
+    return listElement->next;
 }
 
 bool isEmpty(List* list)
