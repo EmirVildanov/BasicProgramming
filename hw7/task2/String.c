@@ -164,7 +164,7 @@ bool compare(String *firstString, String *secondString)
 
 String *cutOut(String *string, int firstIndex, int secondIndex)
 {
-    if (string == NULL)
+    if (string == NULL || firstIndex < 0 || secondIndex < 0 || secondIndex > string->length || firstIndex > secondIndex)
     {
         exit(1);
     }
