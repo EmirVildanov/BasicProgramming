@@ -3,11 +3,11 @@
 
 void checkNewLine(FILE* file, int* newChar, int* numberOfLines)
 {
-    while( (char) *newChar != '\n' && *newChar)
+    while((char) *newChar != '\n' && *newChar)
     {
         if ((char) *newChar != '\t' &&  (char) *newChar != ' ')
         {
-            ++*numberOfLines;
+            ++(*numberOfLines);
             *newChar = fgetc(file);
             while( (char) *newChar != '\n')
             {
