@@ -1,4 +1,4 @@
-#pragma one
+#pragma once
 #include <stdbool.h>
 struct List;
 struct ListElement;
