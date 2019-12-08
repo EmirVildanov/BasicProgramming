@@ -18,7 +18,7 @@ FloatStack* createFloatStack()
     FloatStack* newFloatStack = malloc(sizeof(FloatStack));
     if (newFloatStack == NULL)
     {
-    	exit(1);
+        return NULL;
     }
     newFloatStack->first = NULL;
     return newFloatStack;
@@ -28,7 +28,7 @@ bool isEmptyFloatStack(FloatStack* floatStack)
 {
     if (floatStack == NULL)
     {
-    	exit(1);
+        return true;
     }
     return floatStack->first == NULL;
 }
@@ -37,7 +37,7 @@ bool pushFloatStack(float value, FloatStack* floatStack)
 {
     if (floatStack == NULL)
     {
-    	exit(1);
+        return false;
     }
     FloatStackElement* floatStackElement = (FloatStackElement*) malloc(sizeof(FloatStackElement));
     floatStackElement->value = value;
@@ -50,7 +50,7 @@ float popFloatStack(FloatStack* floatStack)
 {
     if (floatStack == NULL)
     {
-    	exit(1);
+        return 0;
     }
     if (isEmptyFloatStack(floatStack))
     {
@@ -65,6 +65,10 @@ float popFloatStack(FloatStack* floatStack)
 
 void deleteStack(FloatStack* stack)
 {
+    if (stack == NULL)
+    {
+        return;
+    }
     while (stack->first != NULL)
     {
         FloatStackElement *currentElement = stack->first;
