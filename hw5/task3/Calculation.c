@@ -88,7 +88,7 @@ float doOperation(char operator, float firstDigit, float secondDigit)
     }
     if (operator == '-')
     {
-        answer = firstDigit - secondDigit;
+        answer = secondDigit - firstDigit;
     }
     if (operator == '*')
     {

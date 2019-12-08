@@ -29,3 +29,4 @@ bool isEmptyFloatStack(FloatStack *floatStack);
 bool pushFloatStack(float value, FloatStack *floatStack);
 float popFloatStack(FloatStack *floatStack);
 void deleteFloatStack(FloatStack* stack);
+

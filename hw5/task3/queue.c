@@ -6,22 +6,22 @@
 struct QueueElement
 {
     char value;
-    QueueElement* next;
+    QueueElement *next;
 };
 
 struct Queue
 {
-    QueueElement* first;
-    QueueElement* end;
+    QueueElement *first;
+    QueueElement *end;
     int length;
 };
 
-Queue* createQueue()
+Queue *createQueue()
 {
-    Queue *newQueue = (Queue*) malloc(sizeof(Queue));
+    Queue *newQueue = (Queue *) malloc(sizeof(Queue));
     if (newQueue == NULL)
     {
-        exit(1);
+        return NULL;
     }
     newQueue->first = NULL;
     newQueue->end = NULL;
@@ -29,16 +29,16 @@ Queue* createQueue()
     return newQueue;
 }
 
-QueueElement* createQueueElement(Queue* queue, char value)
+QueueElement *createQueueElement(Queue *queue, char value)
 {
-	if (queue == NULL)
+    if (queue == NULL)
     {
-        exit(1);
+        return NULL;
     }
-    QueueElement *newQueueElement = (QueueElement*) malloc(sizeof(QueueElement));
+    QueueElement *newQueueElement = (QueueElement *) malloc(sizeof(QueueElement));
     if (newQueueElement == NULL)
     {
-        exit(1);
+        return NULL;
     }
     newQueueElement->value = value;
     newQueueElement->next = NULL;
@@ -47,9 +47,9 @@ QueueElement* createQueueElement(Queue* queue, char value)
 
 void pushToQueue(char value, Queue *queue)
 {
-	if (queue == NULL)
+    if (queue == NULL)
     {
-        exit(1);
+        return;
     }
     QueueElement *newElement = createQueueElement(queue, value);
     if (isEmptyQueue(queue))
@@ -66,9 +66,9 @@ void pushToQueue(char value, Queue *queue)
 
 bool isEmptyQueue(Queue *queue)
 {
-	if (queue == NULL)
+    if (queue == NULL)
     {
-        exit(1);
+        return true;
     }
     if (queue->length == 0)
     {
@@ -77,11 +77,11 @@ bool isEmptyQueue(Queue *queue)
     return false;
 }
 
-char popFromQueue(Queue* queue)
+char popFromQueue(Queue *queue)
 {
-	if (queue == NULL)
+    if (queue == NULL)
     {
-        exit(1);
+        return '\0';
     }
     if (isEmptyQueue(queue))
     {
@@ -99,8 +99,13 @@ char popFromQueue(Queue* queue)
     return value;
 }
 
+
 void deleteQueue(Queue *queue)
 {
+    if (queue == NULL)
+    {
+        return;
+    }
     while (queue->first != NULL)
     {
         QueueElement *currentElement = queue->first;
