@@ -21,7 +21,7 @@ Queue* createQueue()
     Queue *newQueue = (Queue*) malloc(sizeof(Queue));
     if (newQueue == NULL)
     {
-        exit(1);
+        return NULL;
     }
     newQueue->first = NULL;
     newQueue->end = NULL;
@@ -33,12 +33,12 @@ QueueElement* createQueueElement(Queue* queue, char value)
 {
 	if (queue == NULL)
     {
-        exit(1);
+        return NULL;
     }
     QueueElement *newQueueElement = (QueueElement*) malloc(sizeof(QueueElement));
     if (newQueueElement == NULL)
     {
-        exit(1);
+        return NULL;
     }
     newQueueElement->value = value;
     newQueueElement->next = NULL;
@@ -49,7 +49,7 @@ void pushToQueue(char value, Queue *queue)
 {
 	if (queue == NULL)
     {
-        exit(1);
+        return ;
     }
     QueueElement *newElement = createQueueElement(queue, value);
     if (isEmptyQueue(queue))
@@ -68,7 +68,7 @@ bool isEmptyQueue(Queue *queue)
 {
 	if (queue == NULL)
     {
-        exit(1);
+        return true;
     }
     if (queue->length == 0)
     {
@@ -81,7 +81,7 @@ char popFromQueue(Queue* queue)
 {
 	if (queue == NULL)
     {
-        exit(1);
+        return '\0';
     }
     if (isEmptyQueue(queue))
     {
@@ -102,6 +102,10 @@ char popFromQueue(Queue* queue)
 
 void deleteQueue(Queue *queue)
 {
+    if (queue == NULL)
+    {
+        return;
+    }
     while (queue->first != NULL)
     {
         QueueElement *currentElement = queue->first;

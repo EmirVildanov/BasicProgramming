@@ -18,7 +18,7 @@ Stack* createStack()
     Stack* newStack = malloc(sizeof(Stack));
     if (newStack == NULL)
     {
-    	exit(1);
+        return NULL;
     }
     newStack->first = NULL;
     return newStack;
@@ -28,7 +28,7 @@ bool isEmpty(Stack* stack)
 {
     if (stack == NULL)
     {
-    	exit(1);
+        return true;
     }
     return stack->first == NULL;
 }
@@ -37,7 +37,7 @@ bool push(char value, Stack* stack)
 {
     if (stack == NULL)
     {
-    	exit(1);
+        return false;
     }
     StackElement* stackElement = (StackElement*) malloc(sizeof(StackElement));
     stackElement->value = value;
@@ -50,11 +50,11 @@ char pop(Stack* stack)
 {
     if (stack == NULL)
     {
-    	exit(1);
+        return '\0';
     }
     if (isEmpty(stack))
     {
-        return 0;
+        return '\0';
     }
     StackElement* poppedElement = stack->first;
     stack->first = poppedElement->next;
@@ -66,13 +66,17 @@ char getValue(Stack *stack)
 {
     if (stack == NULL)
     {
-    	exit(1);
+        return '\0';
     }
     return stack->first->value;
 }
 
 void deleteStack(Stack* stack)
 {
+    if (stack == NULL)
+    {
+        return;
+    }
     while (stack->first != NULL)
     {
         StackElement *currentElement = stack->first;
