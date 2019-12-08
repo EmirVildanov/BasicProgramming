@@ -30,73 +30,92 @@ int checkInput(List* list, char* name, char* number)
     return 0;
 }
 
-void readCommand(List* list, int input, int rememberLastNumberIndex, FILE* file, int maxInputSize)
+void executeFirstCommand(List *list, int maxInputSize)
 {
-    if (input == 1)
+    char *name = createCharArray(maxInputSize);
+    char *number = createCharArray(maxInputSize);
+    printf("Enter a new pair (format: name number) :  ");
+    scanf("%s %s", name, number);
+    int checkingAnswer = checkInput(list, name, number);
+    if (checkingAnswer == 0)
     {
-        char *name = createCharArray(maxInputSize);
-        char *number = createCharArray(maxInputSize);
-        printf("Enter a new name number: ");
-        scanf("%s %s", name, number);
-        int checkingAnswer = checkInput(list, name, number);
-        if (checkingAnswer == 0)
-        {
-            printf("You added number: %s_%s \n", name, number);
-            addNew(list, number, name);
-            changeListSize(list, getListSize(list) + 1);
-        }
-        else if (checkingAnswer == 1)
-        {
-            printf("Number is already in the phone book.\n");
-        }
-        else
-        {
-            printf("Name is already in the phone book.\n");
-        }
+        printf("You added number: %s_%s \n", name, number);
+        addNew(list, number, name);
+        changeListSize(list, getListSize(list) + 1);
     }
-    else if (input == 2)
+    else if (checkingAnswer == 1)
     {
-        char *name = createCharArray(maxInputSize);
-        printf("Enter a name: ");
-        scanf("%s", name);
-        char *answer = findNumber(list, name);
-        if (answer[0] != '*')
-        {
-            printf("The number is: %s\n", answer);
-        }
-        else
-        {
-            printf("There is no such name in the book\n");
-        }
-        free(name);
-    }
-    else if (input == 3)
-    {
-        char *number = createCharArray(maxInputSize);
-        printf("Enter a number: ");
-        scanf("%s", number);
-        char *answer = findName(list, number);
-        if (answer[0] != '*')
-        {
-            printf("The name is: %s\n", answer);
-        }
-        else
-        {
-            printf("There is no such number in the book\n");
-        }
-        free(number);
-    }
-    else if (input == 4)
-    {
-        ListElement *currentElement = getListFirst(list);
-        while(getNumberIndex(currentElement) != rememberLastNumberIndex)
-        {
-            fprintf(file, "%s %s \n", getName(currentElement), getNumber(currentElement));
-            currentElement = getNext(currentElement);
-        }
+        printf("Number is already in the phone book.\n");
     }
     else
     {
-        printf("You entered incorrect command\n");
+        printf("Name is already in the phone book.\n");
+    }
+}
+
+void executeSecondCommand(List *list, int maxInputSize)
+{
+    char *name = createCharArray(maxInputSize);
+    printf("Enter a name: ");
+    scanf("%s", name);
+    char *answer = findNumber(list, name);
+    if (answer[0] != '*')
+    {
+        printf("The number is: %s\n", answer);
+    }
+    else
+    {
+        printf("There is no such name in the book\n");
+    }
+    free(name);
+}
+
+void executeThirdCommand(List *list, int maxInputSize)
+{
+    char *number = createCharArray(maxInputSize);
+    printf("Enter a number: ");
+    scanf("%s", number);
+    char *answer = findName(list, number);
+    if (answer[0] != '*')
+    {
+        printf("The name is: %s\n", answer);
+    }
+    else
+    {
+        printf("There is no such number in the book\n");
+    }
+    free(number);
+}
+
+void executeFourthCommand(List *list, FILE *file, int rememberLastNumberIndex)
+{
+    ListElement *currentElement = getListFirst(list);
+    while(getNumberIndex(currentElement) != rememberLastNumberIndex)
+    {
+        fprintf(file, "%s %s \n", getName(currentElement), getNumber(currentElement));
+        currentElement = getNext(currentElement);
+    }
+}
+
+void executeCommand(List* list, int input, int rememberLastNumberIndex, FILE* file, int maxInputSize)
+{
+    switch (input)
+    {
+        case 1:
+            executeFirstCommand(list, maxInputSize);
+            break;
+        case 2:
+            executeSecondCommand(list, maxInputSize);
+            break;
+        case 3:
+            executeThirdCommand(list, maxInputSize);
+            break;
+        case 4:
+            executeFourthCommand(list, file, rememberLastNumberIndex);
+            break;
+        default:
+            printf("You entered incorrect command\n");
+            scanf("%*[^\n]");
+            break;
     }
 }

@@ -5,7 +5,7 @@ char* createCharArray(int size)
     char *list = malloc(size * sizeof(char));
     if (list == NULL)
     {
-        exit(1);
+        return NULL;
     }
     for (int i = 0; i < size; ++i)
     {

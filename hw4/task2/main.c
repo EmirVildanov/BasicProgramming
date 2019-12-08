@@ -21,14 +21,22 @@ int main()
 {
     int input = 0;
     FILE* file = fopen("numbers", "a+");
+    if (file == NULL)
+    {
+        return 1;
+    }
     List* numberList = createList();
+    if (numberList == NULL)
+    {
+        return 1;
+    }
     readFile(file, numberList);
     entrance(); //print entrance lines
     scanf("%d", &input);
     int lastNumberIndex = getListSize(numberList);
     while (input != 0)
     {
-        readCommand(numberList, input, lastNumberIndex - 1, file, maxInputSize);
+        executeCommand(numberList, input, lastNumberIndex - 1, file, maxInputSize);
         printf("Enter new command: ");
         scanf("%d", &input);
     }

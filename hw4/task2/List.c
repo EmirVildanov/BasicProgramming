@@ -23,7 +23,7 @@ List* createList()
     List* newList = malloc(sizeof(List));
     if (newList == NULL)
     {
-        exit(1);
+        return NULL;
     }
     newList->first = NULL;
     newList->size = 0;
@@ -35,7 +35,7 @@ ListElement* createListElement()
     ListElement *newListElement = (ListElement*) malloc(sizeof(ListElement));
     if (newListElement == NULL)
     {
-        exit(1);
+        return NULL;
     }
     return newListElement;
 }
@@ -44,7 +44,7 @@ int getListSize(List *list)
 {
     if (list == NULL)
     {
-        exit(1);
+        return 0;
     }
     return list->size;
 }
@@ -53,7 +53,7 @@ ListElement *getListFirst(List *list)
 {
     if (list == NULL)
     {
-        exit(1);
+        return NULL;
     }
     return list->first;
 }
@@ -62,7 +62,7 @@ void changeListSize(List *list, int value)
 {
     if (list == NULL)
     {
-        exit(1);
+        return;
     }
     list->size = value;
 }
@@ -71,7 +71,7 @@ int getNumberIndex(ListElement *listElement)
 {
     if (listElement == NULL)
     {
-        exit(1);
+        return -1;
     }
     return listElement->numberIndex;
 }
@@ -80,7 +80,7 @@ char *getNumber(ListElement *listElement)
 {
     if (listElement == NULL)
     {
-        exit(1);
+        return NULL;
     }
     return listElement->number;
 }
@@ -89,7 +89,7 @@ char *getName(ListElement *listElement)
 {
     if (listElement == NULL)
     {
-        exit(1);
+        return NULL;
     }
     return listElement->name;
 }
@@ -98,7 +98,7 @@ ListElement *getNext(ListElement *listElement)
 {
     if (listElement == NULL)
     {
-        exit(1);
+        return NULL;
     }
     return listElement->next;
 }
@@ -107,7 +107,7 @@ bool isEmpty(List* list)
 {
     if (list == NULL)
     {
-        exit(1);
+        return true;
     }
     return list->first == NULL;
 }
@@ -116,9 +116,13 @@ void addNew(List* list, char* number, char* name)
 {
     if (list == NULL)
     {
-        exit(1);
+        return;
     }
     ListElement *newElement = createListElement();
+    if (newElement == NULL)
+    {
+        return;
+    }
     newElement->number = number;
     newElement->name = name;
     newElement->numberIndex = list->size;
@@ -131,7 +135,7 @@ char* findNumber(List* list, char name[])
 {
     if (list == NULL)
     {
-        exit(1);
+        return NULL;
     }
     char *wrongSearching = createCharArray(1);
     wrongSearching[0] = '*';
@@ -151,7 +155,7 @@ char* findName(List* list, char number[])
 {
     if (list == NULL)
     {
-        exit(1);
+        return NULL;
     }
     char *wrongSearching = createCharArray(1);
     wrongSearching[0] = '*';
@@ -171,7 +175,7 @@ char* pop(List* list)
 {
     if (list == NULL)
     {
-        exit(1);
+        return NULL;
     }
     if (isEmpty(list))
     {
@@ -189,7 +193,7 @@ void deleteList(List* list)
 {
     if (list == NULL)
     {
-        exit(1);
+        return;
     }
     while(list->first != 0)
     {
