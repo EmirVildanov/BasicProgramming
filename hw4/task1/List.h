@@ -10,6 +10,7 @@ List* createList();
 bool addNew(List* list, int number);
 bool checkLifeStatus(ListElement* listElement);
 int getValue(ListElement* listElement);
+void deleteElement(List *list, ListElement *listElement);
 void changeLifeStatus(ListElement* listElement, bool status);
 ListElement* getFirstListElement(List* list);
 ListElement* getNextElement(ListElement* listElement);
