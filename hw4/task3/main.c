@@ -6,14 +6,14 @@ int** createInputArray(int size)
     int** array = (int**) malloc(size * sizeof(int*));
     if (array == NULL)
     {
-        exit(1);
+        return NULL;
     }
     for (int i = 0; i < size; ++i)
     {
         array[i] = (int*) malloc(size * sizeof(int));
         if (array[i] == NULL)
         {
-            exit(1);
+            return NULL;
         }
         printf("(New line) ");
         for (int j = 0; j < size; ++j)
@@ -30,7 +30,7 @@ int* createIntArray(int size)
     int *array = (int*) malloc(size * sizeof(int));
     if (array == NULL)
     {
-        exit(1);
+        return NULL;
     }
     for (int i = 0; i < size; ++i)
     {
@@ -64,13 +64,13 @@ void freeArray(int** array, int side)
 {
     if (array == NULL)
     {
-        exit(1);
+        return;
     }
     for (int i = 0; i < side; ++i)
     {
         if (array[i] == NULL)
         {
-            exit(1);
+            return;
         }
         free(array[i]);
     }
@@ -83,24 +83,24 @@ void addToSpiralArray(int** list, int currentElementIndex1, int currentElementIn
     spiralArray[*spiralArrayIndex] = list[currentElementIndex1][currentElementIndex2];
 }
 
-void moveNumber(int **list, int* spiralArray, int *currentElementIndex1, int *currentElementIndex2, int direction, int length, int side, int* spiralArrayIndex)
+void moveNumber(int **list, int* spiralArray, int *index1, int *index2, int direction, int length, int side, int* spiralArrayIndex)
 {
     for (int i = 0; i < length; ++i)//move horizontally
     {
-        *currentElementIndex2 += direction;
-        addToSpiralArray(list, *currentElementIndex1, *currentElementIndex2, spiralArray, spiralArrayIndex);
+        *index2 += direction;
+        addToSpiralArray(list, *index1, *index2, spiralArray, spiralArrayIndex);
     }
     for (int i = 0; i < length; ++i)//move upright
     {
-        *currentElementIndex1 -= direction;
-        addToSpiralArray(list, *currentElementIndex1, *currentElementIndex2, spiralArray, spiralArrayIndex);
+        *index1 -= direction;
+        addToSpiralArray(list, *index1, *index2, spiralArray, spiralArrayIndex);
     }
     if (length == side - 1)//moves numbers of the last array column
     {
         for (int i = 0; i < length; ++i)
         {
-            *currentElementIndex2 -= direction;
-            addToSpiralArray(list, *currentElementIndex1, *currentElementIndex2, spiralArray, spiralArrayIndex);
+            *index2 -= direction;
+            addToSpiralArray(list, *index1, *index2, spiralArray, spiralArrayIndex);
         }
     }
 }
