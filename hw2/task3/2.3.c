@@ -5,7 +5,7 @@
 
 const int numberSize = 4;
 
-int* createIntArray(int size)
+int *createIntArray(int size)
 {
     int *list = malloc(size * sizeof(int));
     for (int i = 0; i < size; ++i)
@@ -15,9 +15,9 @@ int* createIntArray(int size)
     return list;
 }
 
-bool findInArray(const int* list, int size, int value)
+bool findInArray(const int *list, int size, int value)
 {
-    for(int i = 0; i < size; ++i)
+    for (int i = 0; i < size; ++i)
     {
         if (list[i] == value)
         {
@@ -27,7 +27,7 @@ bool findInArray(const int* list, int size, int value)
     return false;
 }
 
-bool checkWrongInput(const int* inputArray)
+bool checkDoubleDigit(const int *inputArray)
 {
     for (int i = 0; i < numberSize; ++i)
     {
@@ -52,35 +52,37 @@ int power(int number, int power)
     return result;
 }
 
-void newInput(int* inputArray, int *input)
+int *getNewInput(int *inputArray)
 {
-    while (scanf("%d", input) == 0 || *input < 1000)
+    int input = 0;
+    while (scanf("%d", &input) == 0 || input < 1000 || input > 9999)
     {
         scanf("%*[^\n]");
         printf("Your input is incorrect. Enter new number: ");
     }
     for (int i = 0; i < numberSize; ++i)
     {
-        inputArray[i] = (*input / power(10, numberSize - 1 - i)) % 10;
+        inputArray[i] = (input / power(10, numberSize - 1 - i)) % 10;
     }
     scanf("%*[^\n]");
+    return inputArray;
 }
 
 void startTheGame(int *numberArray)
 {
-    int input = 0;
     int *inputArray = createIntArray(numberSize);
     int bullNumber = 0;
+    int cowNumber = 0;
     while (bullNumber != numberSize)
     {
         bullNumber = 0;
-        int cowNumber = 0;
+        cowNumber = 0;
         printf("Enter the four-digit number(digits are repeated once) : ");
-        newInput(inputArray, &input);
-        while(checkWrongInput(inputArray))
+        inputArray = getNewInput(inputArray);
+        while (checkDoubleDigit(inputArray))
         {
             printf("Digits are repeated once. Enter the number again: ");
-            newInput(inputArray, &input);
+            inputArray = getNewInput(inputArray);
         }
         for (int i = 0; i < numberSize; ++i)
         {
