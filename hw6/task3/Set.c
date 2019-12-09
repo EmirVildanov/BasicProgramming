@@ -171,126 +171,6 @@ SetElement *findNewRoot(SetElement *setElement)
     return minRightElement;
 }
 
-void deleteElement(Set *set, int value)
-{
-    if (set == NULL)
-    {
-        return;
-    }
-    SetElement *currentElement = set->root;
-    //Finding element
-    while (true)
-    {
-        if (currentElement == NULL)
-        {
-            return;
-        }
-        if (value == currentElement->value)
-        {
-            break;
-        }
-        else if (value < currentElement->value)
-        {
-            currentElement = currentElement->leftChild;
-        }
-        else
-        {
-            currentElement = currentElement->rightChild;
-        }
-    }
-    //If the element is a root
-    if (currentElement == set->root)
-    {
-        if (currentElement->leftChild == NULL && currentElement->rightChild == NULL)
-        {
-            set->root = NULL;
-            free(currentElement);
-            --set->size;
-        }
-        else if (currentElement->leftChild == NULL)
-        {
-            set->root = currentElement->rightChild;
-            free(currentElement);
-            --set->size;
-        }
-        else if (currentElement->rightChild == NULL)
-        {
-            set->root = currentElement->leftChild;
-            free(currentElement);
-            --set->size;
-        }
-        else
-        {
-            SetElement *newRoot = findNewRoot(currentElement);
-            int rememberValue = newRoot->value;
-            deleteElement(set, rememberValue);
-            currentElement->value = rememberValue;
-        }
-    }
-        //If the element is parent's left child
-    else if (currentElement == currentElement->parent->leftChild)
-    {
-        if (currentElement->leftChild == NULL && currentElement->rightChild == NULL)
-        {
-            currentElement->parent->leftChild = NULL;
-            free(currentElement);
-            --set->size;
-        }
-        else if (currentElement->leftChild == NULL)
-        {
-            currentElement->parent->leftChild = currentElement->rightChild;
-            currentElement->rightChild->parent = currentElement->parent;
-            free(currentElement);
-            --set->size;
-        }
-        else if (currentElement->rightChild == NULL)
-        {
-            currentElement->parent->leftChild = currentElement->leftChild;
-            currentElement->leftChild->parent = currentElement->parent;
-            free(currentElement);
-            --set->size;
-        }
-        else
-        {
-            SetElement *newRoot = findNewRoot(currentElement);
-            int rememberValue = newRoot->value;
-            deleteElement(set, rememberValue);
-            currentElement->value = rememberValue;
-        }
-    }
-        //if element is parent's right child
-    else
-    {
-        if (currentElement->leftChild == NULL && currentElement->rightChild == NULL)
-        {
-            currentElement->parent->rightChild = NULL;
-            free(currentElement);
-            --set->size;
-        }
-        else if (currentElement->leftChild == NULL)
-        {
-            currentElement->parent->rightChild = currentElement->rightChild;
-            currentElement->rightChild->parent = currentElement->parent;
-            free(currentElement);
-            --set->size;
-        }
-        else if (currentElement->rightChild == NULL)
-        {
-            currentElement->parent->rightChild = currentElement->leftChild;
-            currentElement->leftChild->parent = currentElement->parent;
-            free(currentElement);
-            --set->size;
-        }
-        else
-        {
-            SetElement *newRoot = findNewRoot(currentElement);
-            int rememberValue = newRoot->value;
-            deleteElement(set, rememberValue);
-            currentElement->value = rememberValue;
-        }
-    }
-}
-
 void deleteSet(Set *set)
 {
     if (set == NULL)
@@ -334,6 +214,149 @@ void deleteSet(Set *set)
         }
     }
     free(set);
+}
+
+//sub-functions to delete element
+SetElement *findElementToDelete(Set *set, SetElement *currentElement, int value)
+{
+    while (true)
+    {
+        if (currentElement == NULL)
+        {
+            return NULL;
+        }
+        if (value == currentElement->value)
+        {
+            break;
+        }
+        else if (value < currentElement->value)
+        {
+            currentElement = currentElement->leftChild;
+        }
+        else
+        {
+            currentElement = currentElement->rightChild;
+        }
+    }
+    return currentElement;
+}
+
+Set *deleteRoot(Set* set, SetElement *currentElement)
+{
+    if (currentElement->leftChild == NULL && currentElement->rightChild == NULL)
+    {
+        set->root = NULL;
+        free(currentElement);
+        --set->size;
+    }
+    else if (currentElement->leftChild == NULL)
+    {
+        set->root = currentElement->rightChild;
+        free(currentElement);
+        --set->size;
+    }
+    else if (currentElement->rightChild == NULL)
+    {
+        set->root = currentElement->leftChild;
+        free(currentElement);
+        --set->size;
+    }
+    else
+    {
+        SetElement *newRoot = findNewRoot(currentElement);
+        int rememberValue = newRoot->value;
+        deleteElement(set, rememberValue);
+        currentElement->value = rememberValue;
+    }
+    return set;
+}
+
+Set *deleteLeftChild(Set *set, SetElement *currentElement)
+{
+    if (currentElement->leftChild == NULL && currentElement->rightChild == NULL)
+    {
+        currentElement->parent->leftChild = NULL;
+        free(currentElement);
+        --set->size;
+    }
+    else if (currentElement->leftChild == NULL)
+    {
+        currentElement->parent->leftChild = currentElement->rightChild;
+        currentElement->rightChild->parent = currentElement->parent;
+        free(currentElement);
+        --set->size;
+    }
+    else if (currentElement->rightChild == NULL)
+    {
+        currentElement->parent->leftChild = currentElement->leftChild;
+        currentElement->leftChild->parent = currentElement->parent;
+        free(currentElement);
+        --set->size;
+    }
+    else
+    {
+        SetElement *newRoot = findNewRoot(currentElement);
+        int rememberValue = newRoot->value;
+        deleteElement(set, rememberValue);
+        currentElement->value = rememberValue;
+    }
+    return set;
+}
+
+Set *deleteRightChild(Set *set, SetElement *currentElement)
+{
+    if (currentElement->leftChild == NULL && currentElement->rightChild == NULL)
+    {
+        currentElement->parent->rightChild = NULL;
+        free(currentElement);
+        --set->size;
+    }
+    else if (currentElement->leftChild == NULL)
+    {
+        currentElement->parent->rightChild = currentElement->rightChild;
+        currentElement->rightChild->parent = currentElement->parent;
+        free(currentElement);
+        --set->size;
+    }
+    else if (currentElement->rightChild == NULL)
+    {
+        currentElement->parent->rightChild = currentElement->leftChild;
+        currentElement->leftChild->parent = currentElement->parent;
+        free(currentElement);
+        --set->size;
+    }
+    else
+    {
+        SetElement *newRoot = findNewRoot(currentElement);
+        int rememberValue = newRoot->value;
+        deleteElement(set, rememberValue);
+        currentElement->value = rememberValue;
+    }
+    return set;
+}
+
+void deleteElement(Set *set, int value)
+{
+    if (set == NULL)
+    {
+        return;
+    }
+    SetElement *currentElement = findElementToDelete(set, set->root, value); //Finding element
+    //If the element is a root
+    if (currentElement == set->root)
+    {
+        set = deleteRoot(set, currentElement);
+    }
+    //If the element is parent's left child
+    else if (currentElement == currentElement->parent->leftChild)
+    {
+        set = deleteLeftChild(set, currentElement);
+    }
+    //if element is parent's right child
+    else
+    {
+        set = deleteRightChild(set, currentElement);
+    }
 }
 
 //functions to print set and to put it on the array
