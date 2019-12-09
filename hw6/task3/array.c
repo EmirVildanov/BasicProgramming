@@ -13,3 +13,18 @@ int *createIntArray(int size)
     }
     return list;
 }
+
+int *expandIntArray(int *array, int currentSize, int expandValue)
+{
+    if (array == NULL)
+    {
+        return NULL;
+    }
+    int newSize = currentSize + expandValue;
+    array = realloc(array, newSize * sizeof(int));
+    for (int i = currentSize; i < newSize; ++i)
+    {
+        array[i] = '\0';
+    }
+    return array;
+}

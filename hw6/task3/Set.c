@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include "Set.h"
 
-typedef struct SetElement SetElement;
 struct SetElement
 {
     SetElement *leftChild;
@@ -22,7 +21,7 @@ Set *createSet()
     Set *set = (Set *) malloc(sizeof(Set));
     if (set == NULL)
     {
-        exit(1);
+        return NULL;
     }
     set->root = NULL;
     set->size = 0;
@@ -34,7 +33,7 @@ SetElement *createSetElement(int value)
     SetElement *setElement = (SetElement *) malloc(sizeof(SetElement));
     if (setElement == NULL)
     {
-        exit(1);
+        return NULL;
     }
     setElement->value = value;
     setElement->leftChild = NULL;
@@ -43,11 +42,11 @@ SetElement *createSetElement(int value)
     return setElement;
 }
 
-int getSetSize(Set* set)
+int getSetSize(Set *set)
 {
     if (set == NULL)
     {
-        exit(1);
+        return -1;
     }
     return set->size;
 }
@@ -56,7 +55,7 @@ bool isSetEmpty(Set *set)
 {
     if (set == NULL)
     {
-        exit(1);
+        return true;
     }
     if (set->root == NULL)
     {
@@ -72,7 +71,7 @@ void addToSet(Set *set, int value)
 {
     if (set == NULL)
     {
-        exit(1);
+        return;
     }
     SetElement *newSetElement = createSetElement(value);
     if (isSetEmpty(set))
@@ -114,61 +113,11 @@ void addToSet(Set *set, int value)
     }
 }
 
-void processIncreasingOrder(SetElement *setElement, int *array, int* newElementIndex)
-{
-    if (setElement == NULL)
-    {
-        return;
-    }
-    processIncreasingOrder(setElement->leftChild, array, newElementIndex);
-    array[*newElementIndex] = setElement->value;
-    ++*newElementIndex;
-    printf("%d ", setElement->value);
-    processIncreasingOrder(setElement->rightChild, array, newElementIndex);
-}
-
-void getInIncreasingOrder(Set *set, int *array)
-{
-    if (set == NULL)
-    {
-        exit(1);
-    }
-    printf("Set in the increasing order : ");
-    int newElementIndex = 0;
-    processIncreasingOrder(set->root, array, &newElementIndex);
-    printf("\n");
-}
-
-void processDecreasingOrder(SetElement *setElement, int *array, int* newElementIndex)
-{
-    if (setElement == NULL)
-    {
-        return;
-    }
-    processDecreasingOrder(setElement->rightChild, array, newElementIndex);
-    array[*newElementIndex] = setElement->value;
-    ++*newElementIndex;
-    printf("%d ", setElement->value);
-    processDecreasingOrder(setElement->leftChild, array, newElementIndex);
-}
-
-void getInDecreasingOrder(Set *set, int *array)
-{
-    if (set == NULL)
-    {
-        exit(1);
-    }
-    printf("Set in the decreasing order : ");
-    int newElementIndex = 0;
-    processDecreasingOrder(set->root, array, &newElementIndex);
-    printf("\n");
-}
-
 bool findElement(Set *set, int value)
 {
     if (set == NULL)
     {
-        exit(1);
+        return false;
     }
     SetElement *currentElement = set->root;
     while (true)
@@ -196,7 +145,7 @@ void checkElement(Set *set, int value)
 {
     if (set == NULL)
     {
-        exit(1);
+        return;
     }
     if (findElement(set, value))
     {
@@ -208,52 +157,25 @@ void checkElement(Set *set, int value)
     }
 }
 
-void processPrint(SetElement *setElement)
-{
-    if (setElement == NULL)
-    {
-        printf("null ");
-    }
-    else
-    {
-        printf("(");
-        printf("%d ", setElement->value);
-        processPrint(setElement->leftChild);
-        processPrint(setElement->rightChild);
-        printf(") ");
-    }
-}
-
-void printSet(Set *set)
-{
-    if (set == NULL)
-    {
-        exit(1);
-    }
-    printf("The hole set : ");
-    processPrint(set->root);
-    printf("\n");
-}
-
 SetElement *findNewRoot(SetElement *setElement)
 {
     if (setElement == NULL)
     {
-        exit(1);
+        return NULL;
     }
-    SetElement *maxLeftElement = setElement->leftChild;
-    while (maxLeftElement->rightChild != NULL)
+    SetElement *minRightElement = setElement->rightChild;
+    while (minRightElement->leftChild != NULL)
     {
-        maxLeftElement = maxLeftElement->rightChild;
+        minRightElement = minRightElement->leftChild;
     }
-    return maxLeftElement;
+    return minRightElement;
 }
 
 void deleteElement(Set *set, int value)
 {
     if (set == NULL)
     {
-        exit(1);
+        return;
     }
     SetElement *currentElement = set->root;
     //Finding element
@@ -305,7 +227,7 @@ void deleteElement(Set *set, int value)
             currentElement->value = rememberValue;
         }
     }
-    //If the element is parent's left child
+        //If the element is parent's left child
     else if (currentElement == currentElement->parent->leftChild)
     {
         if (currentElement->leftChild == NULL && currentElement->rightChild == NULL)
@@ -336,7 +258,7 @@ void deleteElement(Set *set, int value)
             currentElement->value = rememberValue;
         }
     }
-    //if element is parent's right child
+        //if element is parent's right child
     else
     {
         if (currentElement->leftChild == NULL && currentElement->rightChild == NULL)
@@ -373,7 +295,7 @@ void deleteSet(Set *set)
 {
     if (set == NULL)
     {
-        exit(1);
+        return;
     }
     SetElement *currentElement = set->root;
     while (set->root != NULL)
@@ -390,7 +312,7 @@ void deleteSet(Set *set)
         {
             if (currentElement != set->root)
             {
-                SetElement* rememberElement = currentElement;
+                SetElement *rememberElement = currentElement;
                 if (currentElement == currentElement->parent->leftChild)
                 {
                     currentElement = currentElement->parent;
@@ -412,4 +334,83 @@ void deleteSet(Set *set)
         }
     }
     free(set);
+}
+
+//functions to print set and to put it on the array
+
+void processIncreasingOrder(SetElement *setElement, int *array, int *newElementIndex)
+{
+    if (setElement == NULL)
+    {
+        return;
+    }
+    processIncreasingOrder(setElement->leftChild, array, newElementIndex);
+    array[*newElementIndex] = setElement->value;
+    ++*newElementIndex;
+    printf("%d ", setElement->value);
+    processIncreasingOrder(setElement->rightChild, array, newElementIndex);
+}
+
+void getInIncreasingOrder(Set *set, int *array)
+{
+    if (set == NULL)
+    {
+        return;
+    }
+    printf("Set in the increasing order : ");
+    int newElementIndex = 0;
+    processIncreasingOrder(set->root, array, &newElementIndex);
+    printf("\n");
+}
+
+void processDecreasingOrder(SetElement *setElement, int *array, int *newElementIndex)
+{
+    if (setElement == NULL)
+    {
+        return;
+    }
+    processDecreasingOrder(setElement->rightChild, array, newElementIndex);
+    array[*newElementIndex] = setElement->value;
+    ++*newElementIndex;
+    printf("%d ", setElement->value);
+    processDecreasingOrder(setElement->leftChild, array, newElementIndex);
+}
+
+void getInDecreasingOrder(Set *set, int *array)
+{
+    if (set == NULL)
+    {
+        return;
+    }
+    printf("Set in the decreasing order : ");
+    int newElementIndex = 0;
+    processDecreasingOrder(set->root, array, &newElementIndex);
+    printf("\n");
+}
+
+void processPrint(SetElement *setElement)
+{
+    if (setElement == NULL)
+    {
+        printf("null ");
+    }
+    else
+    {
+        printf("(");
+        printf("%d ", setElement->value);
+        processPrint(setElement->leftChild);
+        processPrint(setElement->rightChild);
+        printf(") ");
+    }
+}
+
+void printSet(Set *set)
+{
+    if (set == NULL)
+    {
+        return;
+    }
+    printf("The hole set : ");
+    processPrint(set->root);
+    printf("\n");
 }
