@@ -15,7 +15,7 @@ char *expandCharArray(char *array, int currentSize, int expandValue)
 {
     if (array == NULL)
     {
-        exit(1);
+        return NULL;
     }
     int newSize = currentSize + expandValue;
     array = realloc(array, newSize * sizeof(char));
