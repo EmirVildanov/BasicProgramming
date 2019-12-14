@@ -1,9 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "Array.h"
-#include "List.h"
+#include "PhoneBook.h"
 
-void entrance()
+enum NameCheck
+{
+    CORRECT,
+    WRONG_NAME,
+    WRONG_NUMBER
+};
+
+void usage()
 {
     printf("Hello! You opened phone book.\n");
     printf("You have such commands to use: \n");
@@ -11,54 +18,70 @@ void entrance()
     printf("1 - add new number(format: name number)\n");
     printf("2 - find phone number\n");
     printf("3 - find name\n");
-    printf("4 - save data(will appear in the book after closing the program)\n");
+    printf("4 - save data\n");
     printf("Enter the command: ");
 }
 
-int checkInput(List* list, char* name, char* number)
+int checkInput(PhoneBook* book, char* name, char* number)
 {
-    char *nameInTheList = findName(list, number);
-    char *numberInTheList = findNumber(list, name);
-    if (nameInTheList[0] != '*')
+    char *nameInTheBook = findName(book, number);
+    char *numberInTheBook = findNumber(book, name);
+    if (nameInTheBook[0] != '*')
     {
-        return 1;
+        if (numberInTheBook[0] == '*')
+        {
+            free(numberInTheBook);
+        }
+        return WRONG_NAME;
     }
-    else if (numberInTheList[0] != '*')
+    else
     {
-        return 2;
+        free(nameInTheBook);
     }
-    return 0;
+    if (numberInTheBook[0] != '*')
+    {
+        return WRONG_NUMBER;
+    }
+    else
+    {
+        free(numberInTheBook);
+    }
+    return CORRECT;
 }
 
-void executeFirstCommand(List *list, int maxInputSize)
+void executeFirstCommand(PhoneBook *book, int maxInputSize)
 {
     char *name = createCharArray(maxInputSize);
     char *number = createCharArray(maxInputSize);
     printf("Enter a new pair (format: name number) :  ");
     scanf("%s %s", name, number);
-    int checkingAnswer = checkInput(list, name, number);
-    if (checkingAnswer == 0)
+    int checkingAnswer = checkInput(book, name, number);
+    if (checkingAnswer == CORRECT)
     {
         printf("You added number: %s_%s \n", name, number);
-        addNew(list, number, name);
-        changeListSize(list, getListSize(list) + 1);
+        addNew(book, number, name);
+        changeBookSize(book, getBookSize(book) + 1);
     }
-    else if (checkingAnswer == 1)
+    else if (checkingAnswer == WRONG_NUMBER)
     {
+        free(name);
+        free(number);
         printf("Number is already in the phone book.\n");
     }
     else
     {
+        free(name);
+        free(number);
         printf("Name is already in the phone book.\n");
     }
 }
 
-void executeSecondCommand(List *list, int maxInputSize)
+void executeSecondCommand(PhoneBook *book, int maxInputSize)
 {
     char *name = createCharArray(maxInputSize);
     printf("Enter a name: ");
     scanf("%s", name);
-    char *answer = findNumber(list, name);
+    char *answer = findNumber(book, name);
     if (answer[0] != '*')
     {
         printf("The number is: %s\n", answer);
@@ -66,16 +89,17 @@ void executeSecondCommand(List *list, int maxInputSize)
     else
     {
         printf("There is no such name in the book\n");
+        free(answer);
     }
     free(name);
 }
 
-void executeThirdCommand(List *list, int maxInputSize)
+void executeThirdCommand(PhoneBook *book, int maxInputSize)
 {
     char *number = createCharArray(maxInputSize);
     printf("Enter a number: ");
     scanf("%s", number);
-    char *answer = findName(list, number);
+    char *answer = findName(book, number);
     if (answer[0] != '*')
     {
         printf("The name is: %s\n", answer);
@@ -83,35 +107,37 @@ void executeThirdCommand(List *list, int maxInputSize)
     else
     {
         printf("There is no such number in the book\n");
+        free(answer);
     }
     free(number);
 }
 
-void executeFourthCommand(List *list, FILE *file, int rememberLastNumberIndex)
+void executeFourthCommand(PhoneBook *book, FILE *file, int rememberLastNumberIndex)
 {
-    ListElement *currentElement = getListFirst(list);
+    BookElement *currentElement = getBookFirst(book);
     while(getNumberIndex(currentElement) != rememberLastNumberIndex)
     {
         fprintf(file, "%s %s \n", getName(currentElement), getNumber(currentElement));
+        fflush(file);
         currentElement = getNext(currentElement);
     }
 }
 
-void executeCommand(List* list, int input, int rememberLastNumberIndex, FILE* file, int maxInputSize)
+void executeCommand(PhoneBook* book, int input, int rememberLastNumberIndex, FILE* file, int maxInputSize)
 {
     switch (input)
     {
         case 1:
-            executeFirstCommand(list, maxInputSize);
+            executeFirstCommand(book, maxInputSize);
             break;
         case 2:
-            executeSecondCommand(list, maxInputSize);
+            executeSecondCommand(book, maxInputSize);
             break;
         case 3:
-            executeThirdCommand(list, maxInputSize);
+            executeThirdCommand(book, maxInputSize);
             break;
         case 4:
-            executeFourthCommand(list, file, rememberLastNumberIndex);
+            executeFourthCommand(book, file, rememberLastNumberIndex);
             break;
         default:
             printf("You entered incorrect command\n");
