@@ -20,12 +20,7 @@ bool checkInput(const char* line, int length)
 
 bool checkOperator(char digit)
 {
-    bool answer = false;
-    if (digit == '+' || digit == '-' || digit == '*' ||  digit == '/')
-    {
-        answer = true;
-    }
-    return answer;
+    return digit == '+' || digit == '-' || digit == '*' ||  digit == '/';
 }
 
 float doOperation(char operator, float firstDigit, float secondDigit)
@@ -35,15 +30,15 @@ float doOperation(char operator, float firstDigit, float secondDigit)
     {
         answer = firstDigit + secondDigit;
     }
-    if (operator == '-')
+    else if (operator == '-')
     {
         answer = secondDigit - firstDigit;
     }
-    if (operator == '*')
+    else if (operator == '*')
     {
         answer = firstDigit * secondDigit;
     }
-    if (operator == '/')
+    else if (operator == '/')
     {
         answer = secondDigit / firstDigit;
     }
