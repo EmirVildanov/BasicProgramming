@@ -53,18 +53,11 @@ int getSetSize(Set *set)
 
 bool isSetEmpty(Set *set)
 {
-    if (set == NULL)
+    if (set == NULL || set->root == NULL)
     {
         return true;
     }
-    if (set->root == NULL)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    return false;
 }
 
 void addToSet(Set *set, int value)
