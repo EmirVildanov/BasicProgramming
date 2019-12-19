@@ -127,5 +127,6 @@ int main()
     {
         printf("Your input is not a real number\n");
     }
+    free(input);
     return 0;
 }
