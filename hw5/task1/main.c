@@ -6,7 +6,41 @@
 #include "stack.h"
 #include "queue.h"
 
-const int maxInputSize = 100;
+char *getConsoleInput()
+{
+    int maxGettingSize = 10;
+    int expandValue = 10;
+    char *input = createCharArray(maxGettingSize);
+    char *buffer = createCharArray(maxGettingSize);
+    if (fgets(buffer, maxGettingSize, stdin) == NULL)
+    {
+        return NULL;
+    }
+    else
+    {
+        int lastSymbolIndex = 0;
+        while (true)
+        {
+            for (int i = 0; i < expandValue - 1; ++i)// -1 because we don't want to read '\0' symbol
+            {
+                if (buffer[i] == '\0')
+                {
+                    break;
+                }
+                else if (buffer[i] == '\n')
+                {
+                    input[lastSymbolIndex] = '\0';
+                    free(buffer);
+                    return input;
+                }
+                input[lastSymbolIndex] = buffer[i];
+                ++lastSymbolIndex;
+            }
+            input = expandCharArray(input, lastSymbolIndex, expandValue);
+            fgets(buffer, maxGettingSize, stdin);
+        }
+    }
+}
 
 bool checkInput(const char* line, int length)
 {
@@ -68,11 +102,11 @@ void readLineElement(const char* line, Queue* queue, Stack* stack, int index)
 
 char* makePostfix(char* line)
 {
-    int lineLength = strlen(line) - 1;
+    int lineLength = strlen(line) + 1;
     char *newLine = createCharArray(lineLength);
     Stack *stack = createStack();
     Queue *queue = createQueue();
-    for (int i = 0; i < lineLength; ++i)
+    for (int i = 0; i < lineLength - 1; ++i)
     {
         readLineElement(line, queue, stack, i);
     }
@@ -86,6 +120,7 @@ char* makePostfix(char* line)
         newLine[newlineIndex] = popFromQueue(queue);
         ++newlineIndex;
     }
+    newLine[newlineIndex] = '\0';
     deleteQueue(queue);
     deleteStack(stack);
     return newLine;
@@ -93,9 +128,8 @@ char* makePostfix(char* line)
 
 int main()
 {
-    char *line = createCharArray(maxInputSize);
     printf("Please, enter your line without spaces : ");
-    fgets(line, maxInputSize, stdin);
+    char *line = getConsoleInput();
     if (checkInput(line, strlen(line)))
     {
         char *postfixLine = makePostfix(line);

@@ -59,6 +59,7 @@ char pop(Stack* stack)
     StackElement* poppedElement = stack->first;
     stack->first = poppedElement->next;
     char value = poppedElement->value;
+    free(poppedElement);
     return value;
 }
 
