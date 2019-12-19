@@ -12,8 +12,9 @@ struct Town
     int capitalNumber;
     int neighborsNumber;
 
-    int dijkstraValue;//for searching algorithm
-    bool dijkstraStatus;
+    //for searching algorithm
+    int distanceFromCapital;
+    bool checkedStatus;
 };
 
 Town *createTown()
@@ -29,8 +30,8 @@ Town *createTown()
     newTown->neighborsNumber = 0;
     newTown->capitalNumber = 0;
 
-    newTown->dijkstraValue = -1; //instead of infinite value
-    newTown->dijkstraStatus = false;//if it's false it wasn't processed
+    newTown->distanceFromCapital = -1; //instead of infinite value
+    newTown->checkedStatus = false;//if it's false it wasn't processed
 
     return newTown;
 }
@@ -102,7 +103,7 @@ int *getCapitals(int capitalsNumber, Town **townsArray)
         scanf("%d", &currentCapitalNumber);
         capitalsArray[i] = currentCapitalNumber;
         townsArray[currentCapitalNumber - 1]->freeStatus = false;
-        townsArray[currentCapitalNumber - 1]->dijkstraValue = 0;
+        townsArray[currentCapitalNumber - 1]->distanceFromCapital = 0;
         townsArray[currentCapitalNumber - 1]->capitalNumber = currentCapitalNumber;
     }
     return capitalsArray;
@@ -112,8 +113,8 @@ Town **redefineDijkstraValues(Town **townsArray, int townsNumber)
 {
     for (int i = 0; i < townsNumber; ++i)
     {
-        townsArray[i]->dijkstraValue = -1;
-        townsArray[i]->dijkstraStatus = false;
+        townsArray[i]->distanceFromCapital = -1;
+        townsArray[i]->checkedStatus = false;
     }
     return townsArray;
 }
@@ -123,7 +124,7 @@ bool checkNeighborsDijkstraStatus(Town **townsArray, Town *currentTown)
     for (int i = 0; i < currentTown->neighborsNumber; ++i)
     {
         Town *currentNeighbor = townsArray[currentTown->neighbors[i][0] - 1];
-        if (!currentNeighbor->dijkstraStatus)
+        if (!currentNeighbor->checkedStatus)
         {
             return true;
         }
@@ -137,7 +138,7 @@ int findDistanceToUnmarkedNeighbor(Town **townsArray, Town *currentTown, int cur
     {
         Town *currentNeighbor = townsArray[currentTown->neighbors[i][0] - 1];
         if ((currentNeighbor->capitalNumber == 0 || currentNeighbor->capitalNumber == currentCapitalNumber) &&
-            !currentNeighbor->dijkstraStatus)
+            !currentNeighbor->checkedStatus)
         {
             return currentTown->neighbors[i][1];
         }
@@ -151,7 +152,7 @@ void redefineTownToConquer(Town *currentTown, Town **townToConquer)
     {
         (*townToConquer) = currentTown;
     }
-    else if (currentTown->freeStatus && currentTown->dijkstraValue < (*townToConquer)->dijkstraValue)
+    else if (currentTown->freeStatus && currentTown->distanceFromCapital < (*townToConquer)->distanceFromCapital)
     {
         *townToConquer = currentTown;
     }
@@ -160,18 +161,18 @@ void redefineTownToConquer(Town *currentTown, Town **townToConquer)
 void changeDijkstraValue(Town *currentTown, int index, Town *currentNeighbor, int *bestDistance, Town **nearestTown)
 {
     int currentDistance = currentTown->neighbors[index][1];
-    if (currentNeighbor->dijkstraValue == -1)
+    if (currentNeighbor->distanceFromCapital == -1)
     {
-        currentNeighbor->dijkstraValue = currentTown->dijkstraValue + currentDistance;
+        currentNeighbor->distanceFromCapital = currentTown->distanceFromCapital + currentDistance;
         if (currentDistance <= *bestDistance)
         {
             *nearestTown = currentNeighbor;
             *bestDistance = currentDistance;
         }
     }
-    else if (currentTown->dijkstraValue + currentDistance <= currentNeighbor->dijkstraValue)
+    else if (currentTown->distanceFromCapital + currentDistance <= currentNeighbor->distanceFromCapital)
     {
-        currentNeighbor->dijkstraValue = currentTown->dijkstraValue + currentDistance;
+        currentNeighbor->distanceFromCapital = currentTown->distanceFromCapital + currentDistance;
         if (currentDistance <= *bestDistance)
         {
             *nearestTown = currentNeighbor;
@@ -186,7 +187,7 @@ void startDijkstraProcess(Town **townsArray, int townsNumber, Town *currentTown,
     {
         return;
     }
-    currentTown->dijkstraStatus = true;
+    currentTown->checkedStatus = true;
     redefineTownToConquer(currentTown, townToConquer);
     while (checkNeighborsDijkstraStatus(townsArray, currentTown))
     {
@@ -195,13 +196,13 @@ void startDijkstraProcess(Town **townsArray, int townsNumber, Town *currentTown,
         for (int i = 0; i < currentTown->neighborsNumber; ++i)
         {
             Town *currentNeighbor = townsArray[currentTown->neighbors[i][0] - 1];
-            if (currentNeighbor->dijkstraStatus)
+            if (currentNeighbor->checkedStatus)
             {
                 continue;
             }
             else if (currentNeighbor->capitalNumber != 0 && currentNeighbor->capitalNumber != currentCapitalNumber)//if it belongs to another capital
             {
-                currentNeighbor->dijkstraStatus = true;
+                currentNeighbor->checkedStatus = true;
                 continue;
             }
             changeDijkstraValue(currentTown, i, currentNeighbor, &bestDistance, &nearestTown);//also try to find nearest neighbor
