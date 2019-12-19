@@ -61,6 +61,7 @@ char pop(Stack* stack)
     StackElement* poppedElement = stack->first;
     stack->first = poppedElement->next;
     char value = poppedElement->value;
+    free(poppedElement);
     return value;
 }
 
@@ -73,7 +74,7 @@ char getValue(Stack *stack)
     return stack->first->value;
 }
 
-void deleteCharStack(Stack* stack)
+void deleteStack(Stack* stack)
 {
     if (stack == NULL)
     {

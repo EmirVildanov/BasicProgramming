@@ -54,11 +54,11 @@ void readLineElement(const char* line, Queue* queue, Stack* stack, int index)
 
 char* makePostfix(char* line)
 {
-    int lineLength = strlen(line) - 1;
+    int lineLength = strlen(line) + 1;
     char *newLine = createCharArray(lineLength);
     Stack *stack = createStack();
     Queue *queue = createQueue();
-    for (int i = 0; i < lineLength; ++i)
+    for (int i = 0; i < lineLength - 1; ++i)
     {
         readLineElement(line, queue, stack, i);
     }
@@ -72,8 +72,9 @@ char* makePostfix(char* line)
         newLine[newlineIndex] = popFromQueue(queue);
         ++newlineIndex;
     }
-    deleteCharStack(stack);
+    newLine[newlineIndex] = '\0';
     deleteQueue(queue);
+    deleteStack(stack);
     return newLine;
 }
 
@@ -86,15 +87,15 @@ float doOperation(char operator, float firstDigit, float secondDigit)
     {
         answer = firstDigit + secondDigit;
     }
-    if (operator == '-')
+    else if (operator == '-')
     {
         answer = secondDigit - firstDigit;
     }
-    if (operator == '*')
+    else if (operator == '*')
     {
         answer = firstDigit * secondDigit;
     }
-    if (operator == '/')
+    else if (operator == '/')
     {
         answer = secondDigit / firstDigit;
     }
