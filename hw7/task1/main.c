@@ -21,33 +21,47 @@ void runCommand(Set *set, int command, int **increasingArray, int **decreasingAr
     switch (command)
     {
         case 1:
+        {
             printf("Enter the value tou want to add : ");
             scanf("%d", &value);
             addToSet(set, value);
             *increasingArray = expandIntArray(*increasingArray, getSetSize(set), getSetSize(set) + 1);
             *decreasingArray = expandIntArray(*decreasingArray, getSetSize(set), getSetSize(set) + 1);
             return;
+        }
         case 2:
+        {
             printf("Enter the element you want to delete : ");
             scanf("%d", &value);
             deleteElement(set, value);
             return;
+        }
         case 3:
+        {
             printf("Enter the element you want to check : ");
             scanf("%d", &value);
             checkElement(set, value);
             return;
+        }
         case 4:
+        {
             printSet(set);
             return;
+        }
         case 5:
+        {
             getInIncreasingOrder(set, *increasingArray); // collecting in the array
             return;
+        }
         case 6:
+        {
             getInDecreasingOrder(set, *decreasingArray); // collecting in the array
             break;
+        }
         default:
+        {
             return;
+        }
     }
 }
 

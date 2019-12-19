@@ -55,18 +55,7 @@ int getSetSize(Set *set)
 
 bool isSetEmpty(Set *set)
 {
-    if (set == NULL)
-    {
-        return true;
-    }
-    if (set->root == NULL)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    return set == NULL || set->root == NULL;
 }
 
 void balanceParents(Set *set, SetElement *setElement)
