@@ -64,36 +64,15 @@ char *getInput()
     }
 }
 
-bool checkInput(String **pair)
+bool checkInput(const int *pair)
 {
-    int index = 0;
-    while (pair[index] != NULL)
-    {
-        ++index;
-    }
-    if (index != 2)
+    if (pair == NULL)
     {
         return false;
     }
-    String *firstNumber = pair[0];
-    String *secondNumber = pair[1];
-    if (getLength(firstNumber) == 0 || getLength(secondNumber) == 0)
+    if (pair[0] == 0 || pair[1] == 0 || (pair[0] > 3 && pair[0] == pair[1]))
     {
         return false;
-    }
-    for (int i = 0; i < getLength(firstNumber); ++i)
-    {
-        if (!isdigit(getChar(firstNumber, i)))
-        {
-            return false;
-        }
-    }
-    for (int i = 0; i < getLength(secondNumber); ++i)
-    {
-        if (!isdigit(getChar(secondNumber, i)))
-        {
-            return false;
-        }
     }
     return true;
 }
@@ -102,32 +81,16 @@ int *readNewPair()
 {
     printf("Enter new pair: ");
     fflush(stdout);
-    char *newInput = getInput();
-    String* newString = createString(newInput);
-    int *intPair = createIntArray(2);
-    String **pair = split(newString, ' ');
+    int *pair = createIntArray(2);
+    scanf("%d %d", &pair[0], &pair[1]);
     while(!checkInput(pair))
     {
         printf("Wrong input. Try again: ");
         fflush(stdout);
-        newInput = getInput();
-        newString = createString(newInput);
-        intPair = createIntArray(2);
-        pair = split(newString, ' ');
+        fscanf(stdin, "%*[^\n]");
+        scanf("%d %d", &pair[0], &pair[1]);
     }
-    char *firstVariant = toCharPtr(pair[0]);
-    char *secondVariant = toCharPtr(pair[1]);
-    intPair[0] = (int) strtol(firstVariant, NULL, 10);
-    intPair[1] = (int) strtol(secondVariant, NULL, 10);
-
-    free(newInput);
-    deleteString(newString);
-    deleteString(pair[0]);
-    deleteString(pair[1]);
-    free(pair);
-    free(firstVariant);
-    free(secondVariant);
-    return intPair;
+    return pair;
 }
 
 int** addNewPairToArray(int **array, int numberOfStudents)
@@ -166,8 +129,6 @@ int *findVariant(int **pairsArray, int index)
     int currentPairVariant = currentPair[1];
     while (currentPairVariant != 1 && currentPairVariant != 2 && currentPairVariant != 3 && currentPairVariant != -1)
     {
-        printf("%d\n", currentPairVariant - 1);
-        fflush(stdout);
         int check = pairsArray[currentPairVariant - 1][1];
         currentPair[1] = check;
         currentPairVariant = currentPair[1];
