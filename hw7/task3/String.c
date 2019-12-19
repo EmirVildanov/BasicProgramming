@@ -1,52 +1,39 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "String.h"
-#include "Array.h"
-
-const int maxWordSize = 10;
+#include "array.h"
 
 struct String
 {
     int length;
-    int power; //for current task is a number of this word in the file
-    char* array;
+    char *array;
+    int power; //in case we need to calculate how many times it appeared in the hashtable
 };
 
-int getStringPower(String *string)//for current task
-{
-    return string->power;
-}
-
-void changePower(String* string, int power)//for current task
-{
-    string->power = power;
-}
-
-int findCharLength(const char* string)
+int findCharLength(const char *input)//length without '\0' symbol
 {
     int length = 0;
-    while (string[length] != '\0' && string[length] != '\n')
+    while (input[length] != '\0')
     {
         ++length;
     }
     return length;
 }
 
-bool isEmpty(String* string)
+String *createString(char *input)
 {
-    if (string->length == 0)
+    String *string = (String *) malloc(sizeof(String));
+    if (string == NULL)
     {
-        return true;
+        return NULL;
     }
-    return false;
-}
-
-String* createString(char* input)
-{
-    String *string = (String*) malloc(sizeof(String));
     string->length = findCharLength(input);
     string->power = 1;
-    string->array = malloc((string->length + 1) * sizeof(char));
+    string->array = malloc((string->length + 1) * sizeof(char));//length with '\0' symbol
+    if (string->array == NULL)
+    {
+        return NULL;
+    }
     for (int i = 0; i < string->length; ++i)
     {
         string->array[i] = input[i];
@@ -55,62 +42,58 @@ String* createString(char* input)
     return string;
 }
 
-void printString(String* string)
+String **createStringArray(int size)
 {
-    for (int i = 0; i < string->length; ++i)
+    String **wordsArray = (String **) malloc(size * sizeof(String *));
+    if (wordsArray == NULL)
     {
-        printf("%c", string->array[i]);
+        return NULL;
     }
-    printf("\n");
+    for (int i = 0; i < size; ++i)
+    {
+        wordsArray[i] = NULL;
+    }
+    return wordsArray;
 }
 
-int findLength(String* string)
+int getStringPower(String *string)
 {
+    if (string == NULL)
+    {
+        return -1;
+    }
+    return string->power;
+}
+
+void changeStringPower(String *string, int value)
+{
+    if (string == NULL)
+    {
+        return;
+    }
+    string->power = value;
+}
+
+int findLength(String *string)
+{
+    if (string == NULL)
+    {
+        return -1;
+    }
     return string->length;
 }
 
-void deleteString(String* string)
+void deleteString(String *string)
 {
+    if (string == NULL)
+    {
+        return;
+    }
+    free(string->array);
     free(string);
 }
 
-void checkEmpty(String* string)
-{
-    if (isEmpty(string))
-    {
-        printf("The string is empty\n");
-    }
-    else
-    {
-        printf("The string is not empty\n");
-    }
-}
-
-String* clone(String* string)
-{
-    String *newString = (String*) malloc(sizeof(String));
-    int length = string->length;
-    newString->length = string->length;
-    newString->array = malloc(length * sizeof(char));
-    for (int i = 0; i < length; ++i)
-    {
-        newString->array[i] = string->array[i];
-    }
-    return newString;
-}
-
-void addString(String* firstString, String* secondString)
-{
-    int totalLength = firstString->length + secondString->length;
-    realloc(firstString->array, totalLength * sizeof(char));
-    for (int i = firstString->length; i < totalLength; ++i)
-    {
-        firstString->array[i] = secondString->array[i - firstString->length];
-    }
-    firstString->length = totalLength;
-}
-
-bool compare(String* firstString, String* secondString)
+bool compare(String *firstString, String *secondString)
 {
     if (firstString == NULL || secondString == NULL)
     {
@@ -120,17 +103,14 @@ bool compare(String* firstString, String* secondString)
     {
         return false;
     }
-    else
+    for (int i = 0; i < firstString->length; ++i)
     {
-        for (int i = 0; i < firstString->length; ++i)
+        if (firstString->array[i] != secondString->array[i])
         {
-            if (firstString->array[i] != secondString->array[i])
-            {
-                return false;
-            }
+            return false;
         }
-        return true;
     }
+    return true;
 }
 
 bool compareChar(char firstChar, char secondChar)
@@ -142,61 +122,89 @@ bool compareChar(char firstChar, char secondChar)
     return false;
 }
 
-String* cutOut(String* string, int firstIndex, int secondIndex)
+char *toCharPtr(String *string)
 {
-    String* cutString = (String*) malloc(sizeof(String));
-    cutString->length = secondIndex - firstIndex + 1;
-    cutString->array = malloc(cutString->length * sizeof(char));
-    for (int i = firstIndex; i < secondIndex + 1; ++i)
+    if (string == NULL)
     {
-        cutString->array[i - firstIndex] = string->array[i];
+        return NULL;
     }
-    return cutString;
-}
-
-char* makeChar(String* string)
-{
-    char* charString = malloc(string->length * sizeof(char));
+    char *charString = malloc((string->length + 1) * sizeof(char));
+    if (charString == NULL)
+    {
+        return NULL;
+    }
     for (int i = 0; i < string->length; ++i)
     {
         charString[i] = string->array[i];
     }
+    charString[string->length] = '\0';
     return charString;
 }
 
-char getChar(String* string, int index)
+char getChar(String *string, int index)
 {
     return string->array[index];
 }
 
-String** split(String* string, char separator, int* wordsNumber)
+String **addSplittedWord(String **wordsArray, char** currentWord, int *newCharIndex, int *newElementIndex)
 {
-    String **wordsArray = (String**) malloc((string->length / 2) * sizeof(String*));
-    for (int i = 0; i < string->length / 2 ; ++i)
-    {
-        wordsArray[i] = NULL;
-    }
-    char *currentWord = createCharArray(maxWordSize);
+    *currentWord = expandCharArray(*currentWord, *newCharIndex, 1);//we need it in the process of finding it's length
+    (*currentWord)[*newCharIndex] = '\0';
+    *newCharIndex = 0;
+    wordsArray[*newElementIndex] = createString(*currentWord);
+    free(*currentWord);
+    *currentWord = NULL;
+    ++(*newElementIndex);
+    return wordsArray;
+}
+
+String** splitWords(String *string, char separator, String **wordsArray, int *newElementIndex)
+{
     int newCharIndex = 0;
-    int newElementIndex = 0;
-    for (int i = 0; i < string->length - 1; ++i)
+    char *currentWord = NULL;
+    for (int i = 0; i < string->length; ++i)
     {
         if (compareChar(string->array[i], separator))
         {
-            newCharIndex = 0;
-            wordsArray[newElementIndex] = createString(currentWord);
-            currentWord = createCharArray(maxWordSize);
-            ++newElementIndex;
-            while(string->array[i] == ' ' && i < string->length)
+            wordsArray = addSplittedWord(wordsArray, &currentWord, &newCharIndex, newElementIndex);
+            while (string->array[i] == separator && i < string->length)
             {
                 ++i;
             }
+            if (i == string->length)
+            {
+                break;
+            }
         }
+        currentWord = expandCharArray(currentWord, newCharIndex, 1);
         currentWord[newCharIndex] = string->array[i];
         ++newCharIndex;
     }
-    wordsArray[newElementIndex] = createString(currentWord);
-    //++newElementIndex;
-    *wordsNumber = newElementIndex + 1;
+    currentWord = expandCharArray(currentWord, newCharIndex, 1);
+    currentWord[newCharIndex] = '\0';
+    wordsArray[*newElementIndex] = createString(currentWord);
+    free(currentWord);
     return wordsArray;
 }
+
+String **split(String *string, char separator)
+{
+    if (string == NULL)
+    {
+        return NULL;
+    }
+    int arrayMaxLength = (string->length + 3) / 2;// we need it to add an extra NULL element in array for future checking
+    String **wordsArray = (String **) malloc( arrayMaxLength * sizeof(String *));
+    if (wordsArray == NULL)
+    {
+        return NULL;
+    }
+    int newElementIndex = 0;
+    wordsArray = splitWords(string, separator, wordsArray, &newElementIndex);
+    for (int i = newElementIndex + 1; i < arrayMaxLength; ++i)
+    {
+        wordsArray[i] = NULL;
+    }
+    return wordsArray;
+}
+
