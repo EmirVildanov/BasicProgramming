@@ -424,7 +424,7 @@ Set *deleteRightChild(Set *set, SetElement *currentElement)
 
 void deleteElement(Set *set, int value)
 {
-    if (set == NULL)
+    if (set == NULL || !findElement(set, value))
     {
         return;
     }
