@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <ctype.h>
-#include "String.h"
+#include <stdbool.h>
 #include "array.h"
 
 int **createArray(int size)
@@ -9,7 +8,7 @@ int **createArray(int size)
     int **newArray = (int **) malloc(size * sizeof(int *));
     if (newArray == NULL)
     {
-        exit(1);
+        return NULL;
     }
     for (int i = 0; i < size; ++i)
     {
@@ -70,11 +69,7 @@ bool checkInput(const int *pair)
     {
         return false;
     }
-    if (pair[0] == 0 || pair[1] == 0 || (pair[0] > 3 && pair[0] == pair[1]))
-    {
-        return false;
-    }
-    return true;
+    return !(pair[0] == 0 || pair[1] == 0 || (pair[0] > 3 && pair[0] == pair[1]));
 }
 
 int *readNewPair()
