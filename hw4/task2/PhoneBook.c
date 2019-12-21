@@ -1,6 +1,5 @@
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
 #include "PhoneBook.h"
 #include "Array.h"
 

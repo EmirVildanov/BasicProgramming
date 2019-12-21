@@ -1,5 +1,6 @@
 #pragma once
-#include "List.h"
+#include "PhoneBook.h"
 
-void executeCommand(List* list, int input, int rememberLastNumberIndex, FILE* file, int maxInputSize);
-void entrance();
+char *getConsoleInput();
+void executeCommand(PhoneBook* list, int input, int *rememberLastNumberIndex, FILE* file);
+void usage();
