@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include "array.h"
 #include "Calculation.h"
 
@@ -40,11 +41,13 @@ char *getConsoleInput()
     }
 }
 
-bool checkInput(const char* line, int length)
+bool checkInput(const char *line, int length)
 {
     for (int i = 0; i < length; ++i)
     {
-        if (line[i] == ' ')
+        char currentChar = line[i];
+        if (currentChar != ' ' && currentChar != '+' && currentChar != '-' && currentChar != '(' &&
+            currentChar != ')' && currentChar != '*' && currentChar != '/' && !isdigit(currentChar))
         {
             return false;
         }

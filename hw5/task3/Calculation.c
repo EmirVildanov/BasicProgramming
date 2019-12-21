@@ -26,6 +26,10 @@ int getPriority(char operator)
 void readLineElement(const char* line, Queue* queue, Stack* stack, int index)
 {
     char digit = line[index];
+    if (digit == ' ')
+    {
+        return;
+    }
     if (!checkOperator(digit) && digit != '(' && digit != ')')
     {
         pushToQueue(digit, queue);
@@ -54,11 +58,11 @@ void readLineElement(const char* line, Queue* queue, Stack* stack, int index)
 
 char* makePostfix(char* line)
 {
-    int lineLength = strlen(line) + 1;
+    int lineLength = strlen(line);
     char *newLine = createCharArray(lineLength);
     Stack *stack = createStack();
     Queue *queue = createQueue();
-    for (int i = 0; i < lineLength - 1; ++i)
+    for (int i = 0; i < lineLength; ++i)
     {
         readLineElement(line, queue, stack, i);
     }
@@ -109,6 +113,10 @@ float calculateLine(char* line)
     for (int i = 0; i < lineLength; ++i)
     {
         char digit = line[i];
+        if (digit == ' ')
+        {
+            continue;
+        }
         if (!checkOperator(digit))
         {
             float numberDigit = (float) digit - '0';
