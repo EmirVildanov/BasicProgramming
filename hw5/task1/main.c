@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <ctype.h>
 #include "Array.h"
 #include "stack.h"
 #include "queue.h"
@@ -46,7 +47,8 @@ bool checkInput(const char* line, int length)
 {
     for (int i = 0; i < length; ++i)
     {
-        if (line[i] == ' ')
+        char currentChar = line[i];
+        if (currentChar != ' ' && currentChar != '+' && currentChar != '-' && currentChar != '(' && currentChar != ')' && currentChar != '*' && currentChar != '/' && !isdigit(currentChar))
         {
             return false;
         }
@@ -74,6 +76,10 @@ int getPriority(char operator)
 void readLineElement(const char* line, Queue* queue, Stack* stack, int index)
 {
     char digit = line[index];
+    if (digit == ' ')
+    {
+        return;
+    }
     if (!checkOperator(digit) && digit != '(' && digit != ')')
     {
         pushToQueue(digit, queue);
@@ -128,18 +134,16 @@ char* makePostfix(char* line)
 
 int main()
 {
-    printf("Please, enter your line without spaces : ");
+    printf("Please, enter your line : ");
     char *line = getConsoleInput();
-    if (checkInput(line, strlen(line)))
+    while(!checkInput(line, strlen(line)))
     {
-        char *postfixLine = makePostfix(line);
-        printf("The postfix line is : %s", postfixLine);
-        free(postfixLine);
+        printf("Wrong input. Please, enter your line again: ");
+        line = getConsoleInput();
     }
-    else
-    {
-        printf("There are spaces in your line\n");
-    }
+    char *postfixLine = makePostfix(line);
+    printf("The postfix line is : %s", postfixLine);
+    free(postfixLine);
     free(line);
     return 0;
 }
