@@ -1,6 +1,6 @@
 #include <stdlib.h>
 
-char* createCharArray(size)
+char* createCharArray(int size)
 {
     char *list = malloc(size * sizeof(char));
     if (list == NULL)
