@@ -43,12 +43,13 @@ char *getConsoleInput()
     }
 }
 
-bool checkInput(const char* line, int length)
+bool checkInput(const char *line, int length)
 {
     for (int i = 0; i < length; ++i)
     {
         char currentChar = line[i];
-        if (currentChar != ' ' && currentChar != '+' && currentChar != '-' && currentChar != '(' && currentChar != ')' && currentChar != '*' && currentChar != '/' && !isdigit(currentChar))
+        if (currentChar != ' ' && currentChar != '+' && currentChar != '-' && currentChar != '(' &&
+            currentChar != ')' && currentChar != '*' && currentChar != '/' && !isdigit(currentChar))
         {
             return false;
         }
@@ -58,12 +59,12 @@ bool checkInput(const char* line, int length)
 
 bool checkOperator(char digit)
 {
-    return digit == '+' || digit == '-' || digit == '*' ||  digit == '/';
+    return digit == '+' || digit == '-' || digit == '*' || digit == '/';
 }
 
 int getPriority(char operator)
 {
-    if (operator == '+' || operator ==  '-')
+    if (operator == '+' || operator == '-')
     {
         return 1;
     }
@@ -73,7 +74,7 @@ int getPriority(char operator)
     }
 }
 
-void readLineElement(const char* line, Queue* queue, Stack* stack, int index)
+void readLineElement(const char *line, Queue *queue, Stack *stack, int index)
 {
     char digit = line[index];
     if (digit == ' ')
@@ -106,7 +107,7 @@ void readLineElement(const char* line, Queue* queue, Stack* stack, int index)
     }
 }
 
-char* makePostfix(char* line)
+char *makePostfix(char *line)
 {
     int lineLength = strlen(line) + 1;
     char *newLine = createCharArray(lineLength);
@@ -116,12 +117,12 @@ char* makePostfix(char* line)
     {
         readLineElement(line, queue, stack, i);
     }
-    while(!isEmpty(stack))
+    while (!isEmpty(stack))
     {
         pushToQueue(pop(stack), queue);
     }
     int newlineIndex = 0;
-    while(!isEmptyQueue(queue))
+    while (!isEmptyQueue(queue))
     {
         newLine[newlineIndex] = popFromQueue(queue);
         ++newlineIndex;
@@ -136,7 +137,7 @@ int main()
 {
     printf("Please, enter your line : ");
     char *line = getConsoleInput();
-    while(!checkInput(line, strlen(line)))
+    while (!checkInput(line, strlen(line)))
     {
         printf("Wrong input. Please, enter your line again: ");
         line = getConsoleInput();
