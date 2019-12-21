@@ -212,6 +212,10 @@ void deleteSet(Set *set)
 //sub-functions to delete element
 SetElement *findElementToDelete(Set *set, SetElement *currentElement, int value)
 {
+    if (set == NULL)
+    {
+        return NULL;
+    }
     while (true)
     {
         if (currentElement == NULL)
@@ -330,7 +334,7 @@ Set *deleteRightChild(Set *set, SetElement *currentElement)
 
 void deleteElement(Set *set, int value)
 {
-    if (set == NULL)
+    if (set == NULL || !findElement(set, value))
     {
         return;
     }
