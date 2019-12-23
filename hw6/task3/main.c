@@ -15,6 +15,39 @@ void entrance()
     printf("0 - to exit from the program\n");
 }
 
+void addValue(Set* set, int *value, int **increasingArray, int **decreasingArray)
+{
+    printf("Enter the value you want to add : ");
+    while (scanf("%d", value) == 0)
+    {
+        printf("Wrong input. Please try again. Enter the number : ");
+        scanf("%*[^\n]");
+    }
+    scanf("%*[^\n]");
+    addToSet(set, *value);
+    *increasingArray = expandIntArray(*increasingArray, getSetSize(set), getSetSize(set) + 1);
+    *decreasingArray = expandIntArray(*decreasingArray, getSetSize(set), getSetSize(set) + 1);
+}
+
+void deleteValue(Set *set, int *value)
+{
+    printf("Enter the element you want to delete : ");
+    scanf("%d", value);
+    deleteElement(set, *value);
+}
+
+void checkValue(Set *set, int *value)
+{
+    printf("Enter the element you want to check : ");
+    while (scanf("%d", value) == 0)
+    {
+        printf("Wrong input. Please try again. Enter the number : ");
+        scanf("%*[^\n]");
+    }
+    scanf("%*[^\n]");
+    checkElement(set, *value);
+}
+
 void runCommand(Set *set, int command, int **increasingArray, int **decreasingArray)
 {
     int value = 0;
@@ -22,25 +55,17 @@ void runCommand(Set *set, int command, int **increasingArray, int **decreasingAr
     {
         case 1:
         {
-            printf("Enter the value you want to add : ");
-            scanf("%d", &value);
-            addToSet(set, value);
-            *increasingArray = expandIntArray(*increasingArray, getSetSize(set), getSetSize(set) + 1);
-            *decreasingArray = expandIntArray(*decreasingArray, getSetSize(set), getSetSize(set) + 1);
+            addValue(set, &value, increasingArray, decreasingArray);
             return;
         }
         case 2:
         {
-            printf("Enter the element you want to delete : ");
-            scanf("%d", &value);
-            deleteElement(set, value);
+            deleteValue(set, &value);
             return;
         }
         case 3:
         {
-            printf("Enter the element you want to check : ");
-            scanf("%d", &value);
-            checkElement(set, value);
+            checkValue(set, &value);
             return;
         }
         case 4:

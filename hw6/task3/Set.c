@@ -342,17 +342,17 @@ void deleteElement(Set *set, int value)
     //If the element is a root
     if (currentElement == set->root)
     {
-        set = deleteRoot(set, currentElement);
+        deleteRoot(set, currentElement);
     }
     //If the element is parent's left child
     else if (currentElement == currentElement->parent->leftChild)
     {
-        set = deleteLeftChild(set, currentElement);
+        deleteLeftChild(set, currentElement);
     }
     //if element is parent's right child
     else
     {
-        set = deleteRightChild(set, currentElement);
+        deleteRightChild(set, currentElement);
     }
 }
 
