@@ -77,7 +77,7 @@ Town **addNewTownsPair(Town **townsArray, int firstTownNumber, int secondTownNum
     return townsArray;
 }
 
-Town **getNewTownPair(Town **townsArray)
+Town **getNewTownPair(FILE *file, Town **townsArray)
 {
     if (townsArray == NULL)
     {
@@ -86,20 +86,18 @@ Town **getNewTownPair(Town **townsArray)
     int firstTownNumber = 0;
     int secondTownNumber = 0;
     int lengthOfTheRoad = 0;
-    printf("Enter new road parameter (format: firstNumber secondNumber roadLength): ");
-    scanf("%d %d %d", &firstTownNumber, &secondTownNumber, &lengthOfTheRoad);
+    fscanf(file, "%d %d %d", &firstTownNumber, &secondTownNumber, &lengthOfTheRoad);
     townsArray = addNewTownsPair(townsArray, firstTownNumber, secondTownNumber, lengthOfTheRoad);
     return townsArray;
 }
 
-int *getCapitals(int capitalsNumber, Town **townsArray)
+int *getCapitals(FILE *file, int capitalsNumber, Town **townsArray)
 {
     int *capitalsArray = createIntArray(capitalsNumber);
     int currentCapitalNumber = 0;
     for (int i = 0; i < capitalsNumber; ++i)
     {
-        printf("Enter new capital number: ");
-        scanf("%d", &currentCapitalNumber);
+        fscanf(file, "%d", &currentCapitalNumber);
         capitalsArray[i] = currentCapitalNumber;
         townsArray[currentCapitalNumber - 1]->freeStatus = false;
         townsArray[currentCapitalNumber - 1]->distanceFromCapital = 0;
@@ -178,6 +176,10 @@ void changeDijkstraValue(Town *currentTown, int index, Town *currentNeighbor, in
             *bestDistance = currentDistance;
         }
     }
+    else
+    {
+        currentNeighbor->capitalConnectionStatus = true;
+    }
 }
 
 void startDijkstraProcess(Town **townsArray, int townsNumber, Town *currentTown, Town **townToConquer, int currentCapitalNumber)
@@ -244,6 +246,7 @@ void printTownsMap(Town **townsArray, const int *capitalsArray, int townsNumber,
     {
         Town *currentCapital = townsArray[capitalsArray[i] - 1];
         printf("Country number %d consists of following towns : ", currentCapital->number);
+        fflush(stdout);
         for (int j = 0; j < townsNumber; ++j)
         {
             if (townsArray[j]->capitalNumber == currentCapital->number)

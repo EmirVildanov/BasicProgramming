@@ -2,32 +2,35 @@
 #include <stdlib.h>
 #include "Town.h"
 
-Town **readInputData(int *townsNumber, int *capitalsNumber)
+Town **readInputData(FILE *file, int *townsNumber, int *capitalsNumber)
 {
     int roadsNumber = 0;
-    printf("Enter the number of towns: ");
-    scanf("%d", townsNumber);
+    fscanf(file,"%d", townsNumber);
     Town **townsArray = createTownsArray(*townsNumber);
-    printf("Enter the number of roads: ");
-    scanf("%d", &roadsNumber);
+    fscanf(file,"%d", &roadsNumber);
     for (int i = 0; i < roadsNumber; ++i)
     {
-        townsArray = getNewTownPair(townsArray);
+        townsArray = getNewTownPair(file, townsArray);
     }
-    printf("Enter the number of capitals: ");
-    scanf("%d", capitalsNumber);
+    fscanf(file,"%d", capitalsNumber);
     return townsArray;
 }
 
 int main()
 {
+    FILE *file = fopen("Towns", "r");
+    if (file == NULL)
+    {
+        return 1;
+    }
     int townsNumber = 0;
     int capitalsNumber = 0;
-    Town **townsArray = readInputData(&townsNumber, &capitalsNumber);
-    int *capitalsArray = getCapitals(capitalsNumber, townsArray);
+    Town **townsArray = readInputData(file, &townsNumber, &capitalsNumber);
+    int *capitalsArray = getCapitals(file, capitalsNumber, townsArray);
     townsArray = redirectTowns(townsArray, townsNumber, capitalsArray, capitalsNumber);
     printTownsMap(townsArray, capitalsArray, townsNumber, capitalsNumber);
     free(capitalsArray);
     deleteTownsArray(townsArray, townsNumber);
+    fclose(file);
     return 0;
 }
