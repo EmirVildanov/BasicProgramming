@@ -304,7 +304,7 @@ SetElement *balance(Set *set, SetElement *setElement)
 }
 
 //sub-functions to delete element
-SetElement *findElementToDelete(Set *set, SetElement *currentElement, int value)
+SetElement *findElementToDelete(SetElement *currentElement, int value)
 {
     while (true)
     {
@@ -428,7 +428,7 @@ void deleteElement(Set *set, int value)
     {
         return;
     }
-    SetElement *currentElement = findElementToDelete(set, set->root, value); //Finding element
+    SetElement *currentElement = findElementToDelete(set->root, value); //Finding element
     SetElement *rememberCurrentElementParent = currentElement->parent;//we need it to balance parents after deletion current element
     //If the element is a root
     if (currentElement == set->root)
@@ -502,7 +502,6 @@ void deleteSet(Set *set)
 }
 
 //functions to print set and to put it on the array
-
 void processIncreasingOrder(SetElement *setElement, int *array, int *newElementIndex)
 {
     if (setElement == NULL)
