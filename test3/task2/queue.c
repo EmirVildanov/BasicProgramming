@@ -82,9 +82,9 @@ void enqueue(Queue *queue, int value, int priority)
     {
         return;
     }
-    QueueElement *newElement = createQueueElement(queue, value, priority);
     if (isEmptyQueue(queue))
     {
+        QueueElement *newElement = createQueueElement(queue, value, priority);
         queue->first = newElement;
         queue->end = newElement;
         ++queue->length;
@@ -103,6 +103,7 @@ void enqueue(Queue *queue, int value, int priority)
             currentElement = currentElement->next;
         }
     }
+    QueueElement *newElement = createQueueElement(queue, value, priority);
     currentElement->next = newElement;
     queue->end = currentElement;
     ++queue->length;

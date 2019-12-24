@@ -13,6 +13,10 @@ int main()
     printf("Popped element is %d\n", poppedElement);
     poppedElement = dequeue(queue);
     printf("Popped element is %d\n", poppedElement);
+    poppedElement = dequeue(queue);
+    printf("Popped element is %d\n", poppedElement);
+    poppedElement = dequeue(queue);
+    printf("Popped element is %d\n", poppedElement);
     deleteQueue(queue);
     return 0;
 }
