@@ -28,63 +28,46 @@ char* getFileInput(FILE *file)
     return newLine;
 }
 
-bool redirectInput(char* inputLine, char *name, char *number)
+void redirectInput(const char* inputLine, char **name, char **number)
 {
     int nameIndex = 0;
     int numberIndex = 0;
     while(inputLine[nameIndex] != ' ')
     {
-        if (inputLine[nameIndex] == '\0')
-        {
-            free(inputLine);
-            free(name);
-            free(number);
-            return false;
-        }
-        name = expandCharArray(name, nameIndex, 1);
-        name[nameIndex] = inputLine[nameIndex];
+        *name = expandCharArray(*name, nameIndex, 1);
+        (*name)[nameIndex] = inputLine[nameIndex];
         ++nameIndex;
     }
+    *name = expandCharArray(*name, nameIndex, 1);
+    (*name)[nameIndex] = '\0';
     ++nameIndex;
     while (inputLine[nameIndex] != '\0')
     {
-        number = expandCharArray(number, numberIndex, 1);
-        number[numberIndex] = inputLine[nameIndex];
+        *number = expandCharArray(*number, numberIndex, 1);
+        (*number)[numberIndex] = inputLine[nameIndex];
         ++numberIndex;
         ++nameIndex;
     }
-    return true;
+    *number = expandCharArray(*number, numberIndex, 1);
+    (*number)[numberIndex] = '\0';
 }
 
-bool readFile(FILE* file, PhoneBook* phoneBook)
+void readFile(FILE* file, PhoneBook* phoneBook)
 {
     while (!feof(file))
     {
         char *inputLine = getFileInput(file);
-        if (inputLine == NULL)
+        char *name = NULL;
+        char *number = NULL;
+        redirectInput(inputLine, &name, &number);
+        if (name == NULL || number == NULL)
         {
-            return true;
-        }
-        char *name = createCharArray(0);
-        char *number = createCharArray(0);
-        if (!redirectInput(inputLine, name, number))
-        {
-            free(number);
-            free(name);
-            free(inputLine);
-            return false;
-        }
-        if (strcmp(name, "") == 0 || strcmp(number, "") == 0)
-        {
-            free(number);
-            free(name);
-            free(inputLine);
-            return false;
+            printf("ASDFSDFGSDFSDGSDG");
+            exit(1);
         }
         addNew(phoneBook, number, name);
         free(inputLine);
     }
-    return true;
 }
 
 int main()
@@ -95,20 +78,21 @@ int main()
         return 1;
     }
     PhoneBook* phoneBook = createBook();
-    bool readingCheck = readFile(file, phoneBook);
-    if (!readingCheck)
-    {
-        printf("File reading problem\n");
-        return 1;
-    }
+    readFile(file, phoneBook);
     usage();
     char *charInput = getConsoleInput();
     int input = (int) strtol(charInput, NULL, 10);
+    free(charInput);
     int lastNumberIndex = getBookSize(phoneBook) - 1;
+    if (input == 0)
+    {
+        free(charInput);
+    }
     while (input != 0)
     {
         executeCommand(phoneBook, input, &lastNumberIndex, file);
         printf("Enter new command: ");
+        fflush(stdout);
         charInput = getConsoleInput();
         input = (int) strtol(charInput, NULL, 10);
         free(charInput);
@@ -116,5 +100,6 @@ int main()
     fclose(file);
     deleteBook(phoneBook);
     printf("Goodbye!\n");
+    fflush(stdout);
     return 0;
 }

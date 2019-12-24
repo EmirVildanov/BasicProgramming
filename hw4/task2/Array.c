@@ -18,6 +18,10 @@ char *expandCharArray(char *array, int currentSize, int expandValue)
 {
     int newSize = currentSize + expandValue;
     array = realloc(array, newSize * sizeof(char));
+    if (array == NULL)
+    {
+        return NULL;
+    }
     for (int i = currentSize; i < newSize; ++i)
     {
         array[i] = '\0';

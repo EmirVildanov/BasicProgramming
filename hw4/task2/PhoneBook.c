@@ -8,12 +8,12 @@ struct BookElement
     int numberIndex;
     char *number;
     char *name;
-    BookElement* next;
+    BookElement *next;
 };
 
 struct PhoneBook
 {
-    BookElement* first;
+    BookElement *first;
     int size;
 };
 
@@ -36,6 +36,10 @@ BookElement* createBookElement()
     {
         return NULL;
     }
+    newBookElement->next = NULL;
+    newBookElement->name = NULL;
+    newBookElement->number = NULL;
+    newBookElement->numberIndex = 0;
     return newBookElement;
 }
 
@@ -121,7 +125,7 @@ void addNew(PhoneBook* book, char* number, char* name)
     ++book->size;
 }
 
-char* findNumber(PhoneBook* book, char name[])
+char* findNumber(PhoneBook* book, char *name)
 {
     if (book == NULL)
     {
@@ -142,7 +146,7 @@ char* findNumber(PhoneBook* book, char name[])
     return wrongSearching;
 }
 
-char* findName(PhoneBook* book, char number[])
+char* findName(PhoneBook* book, char *number)
 {
     if (book == NULL)
     {

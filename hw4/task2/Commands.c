@@ -32,6 +32,8 @@ char *getConsoleInput()
     char *buffer = createCharArray(maxGettingSize);
     if (fgets(buffer, maxGettingSize, stdin) == NULL)
     {
+        free(input);
+        free(buffer);
         return NULL;
     }
     else
@@ -74,7 +76,7 @@ int checkInput(PhoneBook* book, char* name, char* number)
         {
             free(numberInTheBook);
         }
-        return WRONG_NAME;
+        return WRONG_NUMBER;
     }
     else
     {
@@ -82,7 +84,7 @@ int checkInput(PhoneBook* book, char* name, char* number)
     }
     if (numberInTheBook[0] != '*')
     {
-        return WRONG_NUMBER;
+        return WRONG_NAME;
     }
     else
     {

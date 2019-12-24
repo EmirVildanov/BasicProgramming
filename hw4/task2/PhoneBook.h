@@ -18,6 +18,6 @@ char *getNumber(BookElement *phoneBookElement);
 char *getName(BookElement *phoneBookElement);
 BookElement *getNext(BookElement *phoneBookElement);
 void addNew(PhoneBook *phoneBook, char *number, char *name);
-char *findNumber(PhoneBook *phoneBook, char name[]);
-char *findName(PhoneBook *phoneBook, char number[]);
+char *findNumber(PhoneBook *phoneBook, char *name);
+char *findName(PhoneBook *phoneBook, char *number);
 void deleteBook(PhoneBook *phoneBook);
