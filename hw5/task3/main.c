@@ -43,6 +43,9 @@ char *getConsoleInput()
 
 bool checkInput(const char *line, int length)
 {
+    bool operandWait = true;
+    int openBracketsNumber = 0;
+    int closeBracketsNumber = 0;
     for (int i = 0; i < length; ++i)
     {
         char currentChar = line[i];
@@ -51,6 +54,40 @@ bool checkInput(const char *line, int length)
         {
             return false;
         }
+        if (currentChar == '(')
+        {
+            ++openBracketsNumber;
+        }
+        else if (currentChar == ')')
+        {
+            ++closeBracketsNumber;
+        }
+        else if (isdigit(currentChar))
+        {
+            if (operandWait)
+            {
+                operandWait = !operandWait;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else if (currentChar != ' ')
+        {
+            if (!operandWait)
+            {
+                operandWait = !operandWait;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+    if (operandWait || openBracketsNumber != closeBracketsNumber)
+    {
+        return false;
     }
     return true;
 }
@@ -66,15 +103,14 @@ float calculateNewLine(char* line)
 int main()
 {
     printf("Please, enter your line without spaces: ");
-    char *newLine = getConsoleInput();
-    if (checkInput(newLine, strlen(newLine)))
+    char *line = getConsoleInput();
+    while (!checkInput(line, strlen(line)))
     {
-        printf("The answer is : %f\n", calculateNewLine(newLine));
+        printf("Wrong input. Please, enter your postfix line again: ");
+        free(line);
+        line = getConsoleInput();
     }
-    else
-    {
-        printf("There are spaces in your line\n");
-    }
-    free(newLine);
+    printf("The answer is : %f", calculateNewLine(line));
+    free(line);
     return 0;
 }
