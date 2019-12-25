@@ -7,14 +7,14 @@
 const int machineSize = 18;
 const int finalState = 10;
 
-struct state
+struct State
 {
     unsigned int current;
     signed char symbol;
     unsigned int next;
 };
 
-struct state machine[] =
+struct State machine[] =
         {
                 {0, 'd', 1},
                 {0, 'z', 1},
@@ -103,7 +103,7 @@ bool analyseInput(const char *input)
         {
             currentChar = 'z';
         }
-        else if (isdigit(currentChar) && currentChar != '1')//unit
+        else if (currentChar == '1')//unit
         {
             currentChar = 'u';
         }
