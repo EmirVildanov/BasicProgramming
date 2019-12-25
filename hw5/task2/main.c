@@ -43,14 +43,48 @@ char *getConsoleInput()
 
 bool checkInput(const char *line, int length)
 {
+    bool operandWait = true;
     for (int i = 0; i < length; ++i)
     {
         char currentChar = line[i];
-        if (currentChar != ' ' && currentChar != '+' && currentChar != '-' && currentChar != '(' &&
-            currentChar != ')' && currentChar != '*' && currentChar != '/' && !isdigit(currentChar))
+        if (currentChar != ' ' && currentChar != '+' && currentChar != '-' && currentChar != '*' && currentChar != '/' && !isdigit(currentChar))
         {
             return false;
         }
+        if (i == 0 && !isdigit(currentChar))
+        {
+            return false;
+        }
+        else if (i == 0 && isdigit(currentChar))
+        {
+            continue;
+        }
+        if (isdigit(currentChar))
+        {
+            if (operandWait)
+            {
+                operandWait = !operandWait;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else if (currentChar != ' ')
+        {
+            if (!operandWait)
+            {
+                operandWait = !operandWait;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+    if (!operandWait)
+    {
+        return false;
     }
     return true;
 }
@@ -114,13 +148,17 @@ float calculateLine(char *line)
 int main()
 {
     printf("Please, enter your postfix line : ");
+    fflush(stdout);
     char *line = getConsoleInput();
     while (!checkInput(line, strlen(line)))
     {
         printf("Wrong input. Please, enter your postfix line again: ");
+        fflush(stdout);
+        free(line);
         line = getConsoleInput();
     }
     printf("The answer is : %f", calculateLine(line));
+    fflush(stdout);
     free(line);
     return 0;
 }
