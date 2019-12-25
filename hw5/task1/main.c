@@ -45,6 +45,9 @@ char *getConsoleInput()
 
 bool checkInput(const char *line, int length)
 {
+    bool operandWait = true;
+    int openBracketsNumber = 0;
+    int closeBracketsNumber = 0;
     for (int i = 0; i < length; ++i)
     {
         char currentChar = line[i];
@@ -53,6 +56,40 @@ bool checkInput(const char *line, int length)
         {
             return false;
         }
+        if (currentChar == '(')
+        {
+            ++openBracketsNumber;
+        }
+        else if (currentChar == ')')
+        {
+            ++closeBracketsNumber;
+        }
+        else if (isdigit(currentChar))
+        {
+            if (operandWait)
+            {
+                operandWait = !operandWait;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else if (currentChar != ' ')
+        {
+            if (!operandWait)
+            {
+                operandWait = !operandWait;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+    if (operandWait || openBracketsNumber != closeBracketsNumber)
+    {
+        return false;
     }
     return true;
 }
@@ -137,9 +174,11 @@ int main()
 {
     printf("Please, enter your line : ");
     char *line = getConsoleInput();
+    bool operandState = true;
     while (!checkInput(line, strlen(line)))
     {
         printf("Wrong input. Please, enter your line again: ");
+        free(line);
         line = getConsoleInput();
     }
     char *postfixLine = makePostfix(line);
